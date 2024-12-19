@@ -18,19 +18,27 @@ maxalphanames=1, minalphanames=1, style=ieee, backref=false]{biblatex}
 \addbibresource{refs.bib}
 
 % Basic information
-\title{My fancy Exposé}
-\author{Jane Doe, \href{mailto:jane.doe@your-affiliation.de}{jane.doe@your-affiliation.de}}
-\date{October 2024}
+\title{Verification in Open-Source Hardware Design Tools}
+\author{Tobias Wölfel, \href{mailto:tobias.woelfel@hm.edu}{tobias.woelfel@hm.edu}}
+\date{December 2024}
 
 \begin{document}
 \maketitle
 
 \section{Introduction}
-Briefly introduce the reader to the overall topic, describe the problem and scenario you are working on, and --if not obvious-- explain, how this topic matches the topics of the PZAI.
+With the increasing complexity of hardware architectures, the need for verification
+is becoming more important and demanding. One possibility to verify hardware
+description is to specify timing properties which are later checked.
 
-Limit yourself to about 150 words, use references only if absolutely necessary.
+One way to specify such properties is to use linear temporal logic (LTL).
+The support for LTL is very limited in open-source design tools. One central
+tool to connect different steps in hardware design flow is CIRCT.
 
-
+By adding LTL support to CIRCT and a contiuous flow between differnt tools,
+more capable verification will be possible. With more information available at
+a central location, research can concentrate on how to leverage those insights.
+Additionally, with transformations into other steps in the design process, this
+can allow for new and faster ways for verification.
 
 \section{Related Work}
 Describe the related work and state of the art.
