@@ -32,7 +32,8 @@ description is to specify timing properties which are later checked.
 
 One way to specify such properties is to use linear temporal logic (LTL).
 The support for LTL is very limited in open-source design tools. One central
-tool to connect different steps in hardware design flow is CIRCT.
+tool to connect different steps in hardware design flow is \textit{Circuit IR
+Compilers and Tools (CIRCT)}.
 
 By adding LTL support to CIRCT and a contiuous flow between differnt tools,
 more capable verification will be possible. With more information available at
@@ -40,11 +41,20 @@ a central location, research can concentrate on how to leverage those insights.
 Additionally, with transformations into other steps in the design process, this
 can allow for new and faster ways for verification.
 
+An application to verify the integrity of a system is a RISC-V core.
+With an enhanced verificaion of the core, the trust to the working of the
+implemention is not changed when adding new features with RISC-V extentions.
+
+
 \section{Related Work}
 Describe the related work and state of the art.
 Try to find a balance between covering relevant approaches and detailing those lines of work which are closest to your planned contribution.
 
 Limit yourself to about 300 words, try to avoid references of questionable quality (websites, unverified arxiv preprints, ...) and make sure your references are formatted correctly, e.g.~\cite{cooley1965-fft}.
+
+% - LTL support in Chisel, higher abstraction, greater need to verify the lower levels
+% - SystemVerilog Assertions and support in open source tools
+% - What can be done with LTL?
 
 
 
@@ -60,6 +70,10 @@ The objective of this thesis is ...
 
 To achieve this goal, the following main research questions must be addressed: ....
 
+% Formal verification
+% FPGA testing
+% unbounded vs bounded model checking (state explosion)
+
 
 \section{Research Outline}
 Sketch an outline of your research.
@@ -70,6 +84,10 @@ You can think of this as work packages or milestones that you describe.
 Briefly argue why your research will lead to a Dr.-Ing. or Dr. rer. nat.
 
 Limit yourself to about 500 words, use figures, schemes, tables or itemized formatting as needed.
+
+% - in which way can LTL be used for extentions, is there a way to automate property specifications?
+% - How can LTL be used for formal verification?
+% - Which insights into a hardware design can be deduced from the specified properties and sequences?
 
 
 
