@@ -71,25 +71,39 @@ maxalphanames=1, minalphanames=1, style=ieee, backref=false]{biblatex}
 \maketitle
 
 \section{Introduction}
-With the increasing complexity of hardware architectures, the need for verification
-is becoming more important and demanding. One possibility to verify hardware
-description is to specify timing properties which are later checked.
 
-One way to specify such properties is to use linear temporal logic (LTL).
-The support for LTL is very limited in open-source design tools. One central
-tool to connect different steps in hardware design flow is \textit{Circuit IR
-Compilers and Tools (CIRCT)}.
+Hardware designs are getting more complex and diverse as the fabrication
+technology evolves and specialized solutions offer a competitive advantage.
+This complexity must be handled by the design tools as well as the verification
+flow.
+Due to the increasing complexity and the associated costs, a correct design is
+critical.
+With that design verification is crucial and also ubiquitous.
 
-By adding LTL support to CIRCT and a contiuous flow between differnt tools,
-more capable verification will be possible. With more information available at
-a central location, research can concentrate on how to leverage those insights.
-Additionally, with transformations into other steps in the design process, this
-can allow for new and faster ways for verification.
+One way to verify correct behaviour is to specify signal sequences and states
+the design has to meet.
+A linear sequence of events can be expressed with concurrent SystemVerilog
+Assertions, which are fundamentally based on linear temporal logic (LTL).
+Concurrent SystemVerilog Assertions are widely supported in proprietary
+industry tools, but only marginally in open-source tools.
+The missing support hinders the verification capabilities of open-source
+hardware design space, which is becoming more prominent in the research field.
+Additionally, it prevents research in the area of temporal logic for
+verification, analysis and optimization for hardware designs.
 
-An application to verify the integrity of a system is a RISC-V core.
-With an enhanced verificaion of the core, the trust to the working of the
-implemention is not changed when adding new features with RISC-V extentions.
+A project which offers a framework for hardware designs and basic support for
+SystemVerilog is Circuit IR Compilers and Tools (CIRCT).
+CIRCT builds on top of Multi-Level Intermediate Representation (MLIR) and
+allows to have different levels of abstraction of the design at the same time.
+An advantage of CIRCT's design is the modularity based on a variety of dialects
+and transformation passes, which allows for different input and output formats.
 
+In this work, CIRCT will be extended to support linear temporal logic for
+multiple input formats.
+In order to make use of the verification for consuming tools, different
+transformation methods will be investigated.
+Research will focus on representation formats and abstractions, with the goal
+to take advantage of the new insights into the hardware design.
 
 \section{Related Work}
 Describe the related work and state of the art.
