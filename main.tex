@@ -118,16 +118,37 @@ Limit yourself to about 300 words, try to avoid references of questionable quali
 
 
 \section{Thesis Objective}
-Based on the related work, identify the research gap you will be addressing.
-Try to formulate research questions that your thesis will answer.
-Describe the overall expected outcome of your research.
-Helpful formulations could be as below
+% Based on the related work, identify the research gap you will be addressing.
+% Try to formulate research questions that your thesis will answer.
+% Describe the overall expected outcome of your research.
+% Helpful formulations could be as below
 
-Consider this an executive summary and limit yourself to 150 words.
+% Goal: 150 words
 
-The objective of this thesis is ...
+The support of linear temporal logic as a method, and SystemVerilog Assertions
+in general is only partially available in open-source hardware design tools.
+With this comes a lack of transformation to analogous representations which can
+be consumed by other tools.
+As there is also no available environment in which a hardware design is
+represented in conjunction with the temporal properties, no research is
+possible in the area of hardware design analysis and optimization based on
+signal sequences.
 
-To achieve this goal, the following main research questions must be addressed: ....
+This thesis focuses on the benefits of temporal logic for hardware designs in
+open-source design tools.
+
+To achieve this goal, the following main research questions must be addressed:
+
+\begin{itemize}
+  \item How can linear temporal logic be represented in a multi-level
+    intermediate representation?
+  \item How must transformation methods be designed in order to propagate the
+    user-specified verifications to later stages in the tool flow?
+\end{itemize}
+
+With this thesis, a basis for more capable verification of hardware designs
+will be created, as well as a first look into ways to make further use of
+verification specifications.
 
 % Formal verification
 % FPGA testing
