@@ -72,6 +72,9 @@ maxalphanames=1, minalphanames=1, style=ieee, backref=false]{biblatex}
 
 \section{Introduction}
 
+% Goal: 150 words
+% Actual: 277 words
+
 Hardware designs are getting more complex and diverse as the fabrication
 technology evolves and specialized solutions offer a competitive advantage.
 This complexity must be handled by the design tools as well as the verification
@@ -106,16 +109,22 @@ Research will focus on representation formats and abstractions, with the goal
 to take advantage of the new insights into the hardware design.
 
 \section{Related Work}
-Describe the related work and state of the art.
-Try to find a balance between covering relevant approaches and detailing those lines of work which are closest to your planned contribution.
+% Describe the related work and state of the art.
+% Try to find a balance between covering relevant approaches and detailing those lines of work which are closest to your planned contribution.
 
-Limit yourself to about 300 words, try to avoid references of questionable quality (websites, unverified arxiv preprints, ...) and make sure your references are formatted correctly, e.g.~\cite{cooley1965-fft}.
+% Limit yourself to about 300 words, try to avoid references of questionable quality (websites, unverified arxiv preprints, ...) and make sure your references are formatted correctly, e.g.~\cite{cooley1965-fft}.
 
 % - LTL support in Chisel, higher abstraction, greater need to verify the lower levels
 % - SystemVerilog Assertions and support in open source tools
 % - What can be done with LTL?
 
-
+\begin{itemize}
+  \item LTL and SVA in open source tools
+  \item assertions in simulation, FPGAs
+  \item LTL formula to automata transformation (state machines to create matches and checks)
+  \item analysis and optimization with LTL properties?
+  \item power, active region analysis in industry by benchmarking, running code? static analysis available?
+\end{itemize}
 
 \section{Thesis Objective}
 % Based on the related work, identify the research gap you will be addressing.
