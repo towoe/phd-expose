@@ -165,16 +165,55 @@ verification specifications.
 
 
 \section{Research Outline}
-Sketch an outline of your research.
-What problems will be addressed, how will you solve them?
-What are data or infrastructure requirements, and how will you meet them?
-How do you measure progress and success in your research?
-You can think of this as work packages or milestones that you describe.
-Briefly argue why your research will lead to a Dr.-Ing. or Dr. rer. nat.
-
-Limit yourself to about 500 words, use figures, schemes, tables or itemized formatting as needed.
-
 % - in which way can LTL be used for extentions, is there a way to automate property specifications?
+% Sketch an outline of your research.
+% What problems will be addressed, how will you solve them?
+% What are data or infrastructure requirements, and how will you meet them?
+% How do you measure progress and success in your research?
+% You can think of this as work packages or milestones that you describe.
+% Briefly argue why your research will lead to a Dr.-Ing. or Dr. rer. nat.
+
+% Limit yourself to about 500 words, use figures, schemes, tables or itemized formatting as needed.
+
+The research will be structured into two topics.
+The first part will lead to a suitable representation of the temporal
+descriptions as a dialect in CIRCT, while the second part will focus on making
+use of the new representations to improve on the hardware design.
+
+In order to consume the SystemVerilog Assertions, the SystemVerilog support of
+CIRCT must be extended.
+The lexing, parsing and a first elaboration of the SystemVerilog description is
+handled by Slang, a separate project which has a high level of SystemVerilog
+feature TODO completeness, and also provides a programmatically access to
+extract information from the generated Abstract Syntax Tree (AST).
+The integration of Slang into CIRCT must be continually maintained.
+With the design represented in the AST, a translation into CIRCT's dialects
+follows.
+A suitable representation and dialect translation path for SVAs must be found.
+To ensure progress, it will be possible to focus on a subset of SVAs and also
+limit the abstraction.
+Dialect transformations for different output variants will provide new benefits
+for later stage tools.
+The transformations might require additional dialects which will help to
+represented different forms of matching sequences and condition verifiers.
+This stage will also allow to research the optimal way to represent the
+temporal logic.
+
+With the new dialect available, research will focus on making use of the added
+information.
+One possibility of extracting new insights lies in the analysis of the logic
+elements described by the temporal properties.
+For this a relation between the verification and the design has to be found,
+together with a way of annotating the findings as well as how this can be used
+by other tools.
+Another research area is design optimization.
+Again, based on the temporal properties, which provide additional information
+for a signal, an optimization might be possible on the utilized cells and the
+connections between them.
+The optimization might be possible at different levels of abstraction of the hardware.
+Combining the optimization with the temporal logic dialect will provide
+feedback on the suitability of the representation formulated in the first part
+of the research project.
 % - How can LTL be used for formal verification?
 % - Which insights into a hardware design can be deduced from the specified properties and sequences?
 
