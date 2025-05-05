@@ -75,22 +75,25 @@ maxalphanames=1, minalphanames=1, style=ieee, backref=false]{biblatex}
 % Goal: 150 words
 % Actual: 277 words
 
-Hardware designs are getting more complex and diverse as the fabrication
-technology evolves and specialized solutions offer a competitive advantage.
+Hardware designs are getting more complex and diverse as fabrication technology
+evolves and specialized solutions offer a competitive advantage.
 This complexity must be handled by the design tools as well as the verification
 flow.
 Due to the increasing complexity and the associated costs, a correct design is
 critical.
-With that design verification is crucial and also ubiquitous.
+With that, design verification is crucial and also ubiquitous, making it a
+critical component in the hardware design process.
 
-One way to verify correct behaviour is to specify signal sequences and states
-the design has to meet.
+% TODO: add picture with signal sequence
+One way to ensure correct behaviour is to specify a desired signal sequence and
+following a match, check for a give state of the design.
 A linear sequence of events can be expressed with concurrent SystemVerilog
 Assertions, which are fundamentally based on linear temporal logic (LTL).
 Concurrent SystemVerilog Assertions are widely supported in proprietary
-industry tools, but only marginally in open-source tools.
-The missing support hinders the verification capabilities of open-source
-hardware design space, which is becoming more prominent in the research field.
+industry tools, but only marginally in the open-source semiconductor ecosystem.
+% not really true, they can also use proprietary tools
+The missing support hinders verification capabilities in the open-source
+hardware design field, which is becoming more prominent in academic research.
 Additionally, it prevents research in the area of temporal logic for
 verification, analysis and optimization for hardware designs.
 
@@ -105,8 +108,9 @@ In this work, CIRCT will be extended to support linear temporal logic for
 multiple input formats.
 In order to make use of the verification for consuming tools, different
 transformation methods will be investigated.
-Research will focus on representation formats and abstractions, with the goal
-to take advantage of the new insights into the hardware design.
+Research will focus on representation formats and abstractions for temporal
+logic, with the goal of leveraging this verification information to improve the
+integrated circuit design process itself.
 
 \section{Related Work}
 % Describe the related work and state of the art.
@@ -134,6 +138,7 @@ to take advantage of the new insights into the hardware design.
 
 % Goal: 150 words
 
+% TODO Reformulate this
 The support of linear temporal logic as a method, and SystemVerilog Assertions
 in general is only partially available in open-source hardware design tools.
 With this comes a lack of transformation to analogous representations which can
@@ -153,6 +158,8 @@ To achieve this goal, the following main research questions must be addressed:
     intermediate representation?
   \item How must transformation methods be designed in order to propagate the
     user-specified verifications to later stages in the tool flow?
+  \item Which insights can be gained from the specified properties and
+    sequences?
 \end{itemize}
 
 With this thesis, a basis for more capable verification of hardware designs
@@ -177,38 +184,37 @@ verification specifications.
 The research will be structured into two topics.
 The first part will lead to a suitable representation of the temporal
 descriptions as a dialect in CIRCT, while the second part will focus on making
-use of the new representations to improve on the hardware design.
+use of the new representations to find improvements for the hardware design.
 
 In order to consume the SystemVerilog Assertions, the SystemVerilog support of
 CIRCT must be extended.
 The lexing, parsing and a first elaboration of the SystemVerilog description is
-handled by Slang, a separate project which has a high level of SystemVerilog
-feature TODO completeness, and also provides a programmatically access to
-extract information from the generated Abstract Syntax Tree (AST).
-The integration of Slang into CIRCT must be continually maintained.
+handled by Slang, a separate project, which comes with a high language feature
+completeness for SystemVerilog, while providing programmatic methods to extract
+information from the generated Abstract Syntax Tree (AST).
 With the design represented in the AST, a translation into CIRCT's dialects
 follows.
 A suitable representation and dialect translation path for SVAs must be found.
-To ensure progress, it will be possible to focus on a subset of SVAs and also
-limit the abstraction.
+A subset of SVAs may be selected to be supported in the first step, in order to
+ensure progress.
 Dialect transformations for different output variants will provide new benefits
 for later stage tools.
-The transformations might require additional dialects which will help to
-represented different forms of matching sequences and condition verifiers.
-This stage will also allow to research the optimal way to represent the
+The transformations might require additional dialects in order to represent
+different forms of matching sequences and condition verifiers.
+In this stage, research will focus on finding an optimal representation of the
 temporal logic.
 
-With the new dialect available, research will focus on making use of the added
+With the new dialect available, research will shift to utilize the added
 information.
 One possibility of extracting new insights lies in the analysis of the logic
 elements described by the temporal properties.
 For this a relation between the verification and the design has to be found,
 together with a way of annotating the findings as well as how this can be used
 by other tools.
-Another research area is design optimization.
+Another possibility may be in design optimization.
 Again, based on the temporal properties, which provide additional information
-for a signal, an optimization might be possible on the utilized cells and the
-connections between them.
+for the signals, an optimization might be possible on the utilized cells and
+the connections between them.
 The optimization might be possible at different levels of abstraction of the hardware.
 Combining the optimization with the temporal logic dialect will provide
 feedback on the suitability of the representation formulated in the first part
