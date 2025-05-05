@@ -67,13 +67,14 @@ maxalphanames=1, minalphanames=1, style=ieee, backref=false]{biblatex}
 \author{Tobias Wölfel, \href{mailto:tobias.woelfel@hm.edu}{tobias.woelfel@hm.edu}}
 \date{May 2025}
 
+%TODO add acronyms
+
 \begin{document}
 \maketitle
 
 \section{Introduction}
-
-% Goal: 150 words
-% Actual: 277 words
+% Limit: 150 words
+% Actual: 299 words
 
 Hardware designs are getting more complex and diverse as fabrication technology
 evolves and specialized solutions offer a competitive advantage.
@@ -113,10 +114,10 @@ logic, with the goal of leveraging this verification information to improve the
 integrated circuit design process itself.
 
 \section{Related Work}
-% Describe the related work and state of the art.
-% Try to find a balance between covering relevant approaches and detailing those lines of work which are closest to your planned contribution.
+% related work and state of the art
+% Overview of relevant approaches and detailing most similar solutions
 
-% Limit yourself to about 300 words, try to avoid references of questionable quality (websites, unverified arxiv preprints, ...) and make sure your references are formatted correctly, e.g.~\cite{cooley1965-fft}.
+% Limit: 300 words
 
 % - LTL support in Chisel, higher abstraction, greater need to verify the lower levels
 % - SystemVerilog Assertions and support in open source tools
@@ -131,12 +132,12 @@ integrated circuit design process itself.
 \end{itemize}
 
 \section{Thesis Objective}
-% Based on the related work, identify the research gap you will be addressing.
-% Try to formulate research questions that your thesis will answer.
+% Based on the related work, show the research gap addressed in the thesis
+% Research questions the thesis will answer
 % Describe the overall expected outcome of your research.
-% Helpful formulations could be as below
 
-% Goal: 150 words
+% Limit: 150 words
+% Actual: 180 words
 
 % TODO Reformulate this
 The support of linear temporal logic as a method, and SystemVerilog Assertions
@@ -166,20 +167,17 @@ With this thesis, a basis for more capable verification of hardware designs
 will be created, as well as a first look into ways to make further use of
 verification specifications.
 
-% Formal verification
-% FPGA testing
-% unbounded vs bounded model checking (state explosion)
-
-
 \section{Research Outline}
-% Sketch an outline of your research.
-% What problems will be addressed, how will you solve them?
-% What are data or infrastructure requirements, and how will you meet them?
-% How do you measure progress and success in your research?
-% You can think of this as work packages or milestones that you describe.
-% Briefly argue why your research will lead to a Dr.-Ing. or Dr. rer. nat.
+% Sketch outline
+% Problems faced, planned solutions?
+% External requirements, how to meet them?
+% Progress measurement, success criteria?
+% Argument for getting Dr.-Ing.
 
-% Limit yourself to about 500 words, use figures, schemes, tables or itemized formatting as needed.
+% Figures, schemes, tables or itemized formatting
+
+% Limit: 500 words
+% Actual: 423 words
 
 The research will be structured into two topics.
 The first part will lead to a suitable representation of the temporal
@@ -197,8 +195,9 @@ follows.
 A suitable representation and dialect translation path for SVAs must be found.
 A subset of SVAs may be selected to be supported in the first step, in order to
 ensure progress.
-Dialect transformations for different output variants will provide new benefits
-for later stage tools.
+% state explosion possible?
+Dialect transformations, if possible and realizable, for different output
+variants will provide new benefits for later stage tools.
 The transformations might require additional dialects in order to represent
 different forms of matching sequences and condition verifiers.
 In this stage, research will focus on finding an optimal representation of the
