@@ -1,4 +1,4 @@
-SRC := main.tex
+SRC := expose.tex
 OUTDIR := build
 PDF := $(OUTDIR)/$(SRC:.tex=.pdf)
 
