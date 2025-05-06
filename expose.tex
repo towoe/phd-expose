@@ -4,6 +4,7 @@
 \usepackage{algorithm,algorithmic}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{multirow}
 \usepackage{svg}
@@ -11,11 +12,14 @@
 \usepackage[svgnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, positioning, arrows, arrows.meta, decorations, decorations.pathmorphing, backgrounds, fit, petri, chains}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usetikztiminglibrary{columntype}
 
 \tikzset{
 	component/.style={
 		font=\small\itshape,
-text width = 2cm},
+text width = 1.8cm},
 	group/.style={
 		draw=gray!40,
 		dashed,
@@ -98,12 +102,121 @@ hardware design field, which is becoming more prominent in academic research.
 Additionally, it prevents research in the area of temporal logic for
 verification, analysis and optimization for hardware designs.
 
+\begin{figure}
+  \centering
+  \begin{subfigure}[c]{0.45\textwidth}
+    \centering
+    \begin{tikztimingtable}
+      Clock & 10{C} \\
+      req   & 10{L} \\
+      resp  & 10{L} \\
+    \end{tikztimingtable}
+    \caption{Signals}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[c]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \draw (0,0) -- (2,1);
+      \draw (4,0) -- (2,1);
+    \end{tikzpicture}
+    \caption{SVA}
+  \end{subfigure}
+  \caption{Signal sequences}\label{fig:sequences}
+\end{figure}
+
 A project which offers a framework for hardware designs and basic support for
 SystemVerilog is Circuit IR Compilers and Tools (CIRCT).
 CIRCT builds on top of Multi-Level Intermediate Representation (MLIR) and
 allows to have different levels of abstraction of the design at the same time.
 An advantage of CIRCT's design is the modularity based on a variety of dialects
 and transformation passes, which allows for different input and output formats.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    % input languages
+    \node [component] (inputLanguages) {Input};
+    % input conversion
+    \node [component, below=of inputLanguages] (inputConversion) {Input Conversion};
+    \node [existing, right=of inputConversion] (firrtlParser) {FIRRTLParser};
+    \node [wip, right=of firrtlParser] (yosysParser) {RTL-IR Parser};
+    \node [wip, right=of yosysParser] (slang) {SystemVerilog Parser};
+    \node [group, fit=(firrtlParser) (yosysParser) (slang)] (inputConversionBbox) {};
+
+    % input languages (cont. with alignment to input conversion)
+    \node [existing] at (firrtlParser|-inputLanguages) (chisel) {Chisel};
+    \node [wip, align=center] at (yosysParser|-inputLanguages) (yosysrtl) {Yosys\\RTL-IR};
+    \node [existing] at (slang|-inputLanguages) (sv) {SystemVerilog};
+    \node [wip, right=of sv, align=center] (ltlgen) {LTL\\Generator};
+    \node [group, fit=(yosysrtl) (sv) (chisel) (yosysrtl) (sv)] (inputR) {};
+
+    % Dialects
+    \node [component,below=of inputConversion] (dialects) {Dialect};
+    \node [existing, below=of firrtlParser] (firrtl) {FIRRTL};
+    \node [existing, below=of slang] (moore) {Moore};
+    \node [group, fit=(firrtl) (moore)] (dialectsR) {};
+
+    % core dialects
+    \node [component,below=2cm of dialects] (coreText) {Core dialects};
+    \node [existing, right=of coreText] (hw) {hw};
+    \node [existing, right=of hw] (comb) {comb};
+    \node [existing, right=of comb] (seq) {seq};
+    \node [wip, right=of seq] (ltl) {ltl};
+    \node [group, fit=(hw) (comb) (seq) (ltl)] (coreR) {};
+
+    % output conversion
+    \node [component,below=2cm of coreText] (outputConversion) {Output Conversion};
+    \node [wip, right=of outputConversion] (yosys) {Yosys};
+    \node [existing, right=of yosys] (exportVerilog) {ExportVerilog};
+    \node [existing, right=of exportVerilog] (verilator) {Verilator};
+    \node [wip, right=of verilator] (btor2) {Btor2};
+    \node [group, fit=(yosys) (exportVerilog) (verilator) (btor2)] (outputConversionBbox) {};
+
+    % CIRCT
+    \node [outline, fit=(inputConversionBbox) (coreR) (outputConversionBbox)] (circt) {};
+
+    % Output Language
+    \node [component, below=of outputConversion] (outputLanguages) {Output};
+    \node [wip, below=of yosys, align=center] (verilog) {Synthesizeable\\ Verilog};
+    \node [wip, right=of verilog, align=center] (verilog) {SystemVerilog + SVA};
+
+    % Connect input conversion to dialects
+    \draw [flowWip] (yosysParser.south) to [out=-90, in=90, looseness=0.5] (moore.north);
+    \draw [flowWip] (slang) -- (moore.north);
+    \draw [flowExisting] (firrtlParser) -- (firrtl);
+
+    % Connect dialects to core
+    \draw [flowExisting] (firrtl.south) to [out=-90, in=120, looseness=0.5] (ltl.north);
+    \draw [flowWip] (moore.south) to [out=-90, in=60, looseness=0.5] (ltl.north);
+
+    % Ltl to all output conversions
+    \draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (yosys);
+    \draw [flowExisting] (ltl) to [out=-90, in=90, looseness=0.5] (exportVerilog);
+    \draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (verilator);
+    \draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (btor2);
+  \end{tikzpicture}
+  \caption{LTL dialect as a central component in enabling verification support across a wide range of open source EDA tools.}
+  \label{fig:toolOverview}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \tikzset{normal/.style={minimum width=2cm, minimum height=0.8cm, dashed, draw=black!50}}
+    \def\x{0}
+    \def\y{0}
+    \def\xd{3}
+    \def\yd{1}
+
+    \node[normal] (chisel) at (\x,\y) {Chisel};
+    \node[normal] (svlang) at (\x+\xd,\y) {SystemVerilog};
+    \node[normal] (circt) at (\x+0*\xd,\y-1*\yd) {CIRCT};
+    \node[normal] (yosys) at (\x+0*\xd,\y-2*\yd) {Yosys};
+    \node[normal] (verilator) at (\x+1*\xd,\y-2*\yd) {Verilator};
+  \end{tikzpicture}
+  \caption{Open-source hardware design tool landscape}\label{fig:toolLandscape}
+\end{figure}
 
 In this work, CIRCT will be extended to support linear temporal logic for
 multiple input formats.
@@ -203,6 +316,28 @@ different forms of matching sequences and condition verifiers.
 In this stage, research will focus on finding an optimal representation of the
 temporal logic.
 
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node[draw] at (0,0) {LTL: ref a};
+    \node[draw] at (0,-1) {LTL: ref b};
+    \node[draw] at (0,-2) {LTL: implication, 1, 2};
+    \node[draw] at (0,-3) {LTL: strong eventually, 3};
+  \end{tikzpicture}
+  \caption{Dialect abstraction}\label{fig:dialectAbstraction}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node[draw] at (0,0) {LTL: eventually a implies b};
+    \node[draw] at (-4,-1) {Synth: FSM};
+    \node[draw] at (0,-1) {Simulation: statements};
+    \node[draw] at (4,-1) {Formal: BTOR2};
+  \end{tikzpicture}
+  \caption{LTL lowering options}\label{fig:ltlLowering}
+\end{figure}
+
 With the new dialect available, research will shift to utilize the added
 information.
 One possibility of extracting new insights lies in the analysis of the logic
@@ -219,6 +354,14 @@ Combining the optimization with the temporal logic dialect will provide
 feedback on the suitability of the representation formulated in the first part
 of the research project.
 
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node[draw] at (0,0) {$c = a \lor b$};
+  \end{tikzpicture}
+  \caption{Temporal logic utilization}\label{}
+\end{figure}
+
 The research merits a Dr.-Ing. degree through two contributions to electronic
 design automation for integrated circuits.
 First, it advances verification methodology in hardware design by extending a
@@ -229,74 +372,6 @@ designs.
 Second, the research explores how verification specification of temporal logic
 can be utilized in the design process, in contrast to only forwarding it to
 tools later in the design flow, gaining additional insights into the design.
-
-\begin{figure}[htb]
-\centering
-\begin{tikzpicture}
-	% input languages
-	\node [component] (inputLanguages) {Input};
-	% input conversion
-	\node [component, below=of inputLanguages] (inputConversion) {Input Conversion};
-	\node [existing, right=of inputConversion] (firrtlParser) {FIRRTLParser};
-	\node [wip, right=of firrtlParser] (yosysParser) {RTL-IR Parser};
-	\node [wip, right=of yosysParser] (slang) {SystemVerilog Parser};
-	\node [group, fit=(firrtlParser) (yosysParser) (slang)] (inputConversionBbox) {};
-
-	% input languages (cont. with alignment to input conversion)
-	\node [existing] at (firrtlParser|-inputLanguages) (chisel) {Chisel};
-	\node [wip, align=center] at (yosysParser|-inputLanguages) (yosysrtl) {Yosys\\RTL-IR};
-	\node [existing] at (slang|-inputLanguages) (sv) {SystemVerilog};
-	\node [wip, right=of sv, align=center] (ltlgen) {LTL\\Generator};
-	\node [group, fit=(yosysrtl) (sv) (chisel) (yosysrtl) (sv)] (inputR) {};
-
-	% Dialects
-	\node [component,below=of inputConversion] (dialects) {Dialect};
-	\node [existing, below=of firrtlParser] (firrtl) {FIRRTL};
-	\node [existing, below=of slang] (moore) {Moore};
-	\node [group, fit=(firrtl) (moore)] (dialectsR) {};
-
-	% core dialects
-	\node [component,below=2cm of dialects] (coreText) {Core dialects};
-	\node [existing, right=of coreText] (hw) {hw};
-	\node [existing, right=of hw] (comb) {comb};
-	\node [existing, right=of comb] (seq) {seq};
-	\node [wip, right=of seq] (ltl) {ltl};
-	\node [group, fit=(hw) (comb) (seq) (ltl)] (coreR) {};
-
-	% output conversion
-	\node [component,below=2cm of coreText] (outputConversion) {Output Conversion};
-	\node [wip, right=of outputConversion] (yosys) {Yosys};
-	\node [existing, right=of yosys] (exportVerilog) {ExportVerilog};
-	\node [existing, right=of exportVerilog] (verilator) {Verilator};
-	\node [wip, right=of verilator] (btor2) {Btor2};
-	\node [group, fit=(yosys) (exportVerilog) (verilator) (btor2)] (outputConversionBbox) {};
-
-	% CIRCT
-	\node [outline, fit=(inputConversionBbox) (coreR) (outputConversionBbox)] (circt) {};
-
-	% Output Language
-	\node [component, below=of outputConversion] (outputLanguages) {Output};
-	\node [wip, below=of yosys, align=center] (verilog) {Synthesizeable\\ Verilog};
-	\node [wip, right=of verilog, align=center] (verilog) {SystemVerilog + SVA};
-
-	% Connect input conversion to dialects
-	\draw [flowWip] (yosysParser.south) to [out=-90, in=90, looseness=0.5] (moore.north);
-	\draw [flowWip] (slang) -- (moore.north);
-	\draw [flowExisting] (firrtlParser) -- (firrtl);
-
-	% Connect dialects to core
-	\draw [flowExisting] (firrtl.south) to [out=-90, in=120, looseness=0.5] (ltl.north);
-	\draw [flowWip] (moore.south) to [out=-90, in=60, looseness=0.5] (ltl.north);
-
-	% Ltl to all output conversions
-	\draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (yosys);
-	\draw [flowExisting] (ltl) to [out=-90, in=90, looseness=0.5] (exportVerilog);
-	\draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (verilator);
-	\draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (btor2);
-\end{tikzpicture}
-	\caption{LTL dialect as a central component in enabling verification support across a wide range of open source EDA tools.}
-	\label{fig:toolOverview}
-\end{figure}
 
 \printbibliography
 
