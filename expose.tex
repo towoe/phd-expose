@@ -15,6 +15,7 @@
 \usepackage{tikz-timing}
 \usetikztiminglibrary[rising arrows]{clockarrows}
 \usetikztiminglibrary{columntype}
+\usepackage{listings}
 
 \tikzset{
 	component/.style={
@@ -89,40 +90,57 @@ critical.
 With that, design verification is crucial and also ubiquitous, making it a
 critical component in the hardware design process.
 
-% TODO: add picture with signal sequence
-One way to ensure correct behaviour is to specify a desired signal sequence and
-following a match, check for a give state of the design.
+One approach to ensuring correct behavior is to specify expected signal sequences and
+verify that the design achieves a particular state following these sequences, as
+illustrated in Figure \ref{fig:sequences}.
 A linear sequence of events can be expressed with concurrent SystemVerilog
 Assertions, which are fundamentally based on linear temporal logic (LTL).
 Concurrent SystemVerilog Assertions are widely supported in proprietary
-industry tools, but only marginally in the open-source semiconductor ecosystem.
-% not really true, they can also use proprietary tools
-The missing support hinders verification capabilities in the open-source
-hardware design field, which is becoming more prominent in academic research.
+industry tools, but support in the open-source semiconductor ecosystem is
+limited.
+As open-source hardware design projects are a major user of the open-source
+tooling, limited support for verification negatively impacts the quality of
+designs and adoption of the tools.
 Additionally, it prevents research in the area of temporal logic for
 verification, analysis and optimization for hardware designs.
 
 \begin{figure}
   \centering
-  \begin{subfigure}[c]{0.45\textwidth}
+  \begin{subfigure}[b]{0.35\textwidth}
     \centering
-    \begin{tikztimingtable}
-      Clock & 10{C} \\
-      req   & 10{L} \\
-      resp  & 10{L} \\
-    \end{tikztimingtable}
-    \caption{Signals}
+    \begin{lstlisting}[basicstyle=\sffamily\sffamily\small,
+                      columns=flexible]
+    assert property(
+      @(posedge clk) req |=> resp
+    );
+    \end{lstlisting}
+    \caption{SystemVerilog Assertion showing that \texttt{req} must be followed
+    by \texttt{resp} in the next cycle.}
   \end{subfigure}
   ~
-  \begin{subfigure}[c]{0.45\textwidth}
+  \begin{subfigure}[b]{0.29\textwidth}
     \centering
-    \begin{tikzpicture}
-      \draw (0,0) -- (2,1);
-      \draw (4,0) -- (2,1);
-    \end{tikzpicture}
-    \caption{SVA}
+    \begin{tikztimingtable}[timing/font=\small]
+      clk   & 10{C} \\
+      req   & 2{L} 2{H} 6{L} \\
+      resp  & 4{L} 2{H} 4{L} \\
+    \end{tikztimingtable}
+    \caption{A valid signal trace matching the SystemVerilog property.}
   \end{subfigure}
-  \caption{Signal sequences}\label{fig:sequences}
+  ~
+  \begin{subfigure}[b]{0.29\textwidth}
+    \centering
+    \begin{tikztimingtable}[timing/font=\small]
+      clk   & 10{C} \\
+      req   & 2{L} 2{H} 6{L} \\
+      resp  & 6{L} 2{H} 2{L} \\
+    \end{tikztimingtable}
+    \caption{Invalid signal trace. \texttt{resp} is not asserted after
+    \texttt{req} is detected.}
+  \end{subfigure}
+  \caption{Definition of a simple signal sequence (\texttt{req}: asserted for
+  one cycle) and the property to check for one cycle later (state of the design
+  must result in an asserted \texttt{resp}).}\label{fig:sequences}
 \end{figure}
 
 A project which offers a framework for hardware designs and basic support for
