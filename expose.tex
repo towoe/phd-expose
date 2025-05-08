@@ -11,53 +11,42 @@
 \usepackage{textcomp}
 \usepackage[svgnames]{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric, positioning, arrows, arrows.meta, decorations, decorations.pathmorphing, backgrounds, fit, petri, chains}
+\usetikzlibrary{shapes.geometric, positioning, arrows, arrows.meta,
+  decorations, decorations.pathmorphing, backgrounds, fit, petri, chains, shapes.symbols}
 \usepackage{tikz-timing}
 \usetikztiminglibrary[rising arrows]{clockarrows}
 \usetikztiminglibrary{columntype}
 \usepackage{listings}
 
 \tikzset{
-	component/.style={
-		font=\small\itshape,
-text width = 1.8cm},
-	group/.style={
-		draw=gray!40,
-		dashed,
-		decoration={zigzag,
-		amplitude=0.5}
-	},
-	outline/.style={
-		draw=black!50,
-		inner sep=5pt,
-		decorate,
-		decoration={random steps,
-		segment length=10pt,
-		amplitude=1pt}
-	},
-	wip/.style={
-		minimum height=1cm,
-		minimum width= 2cm,
-		dashed,
-		rounded corners=2pt,
-		draw=gray!80,
-		fill=LightCoral!30
-	},
-	existing/.style={
-		minimum height=1cm,
-		minimum width= 2cm,
-		rounded corners=2pt,
-		draw=gray!80,
-		fill=gray!20
-	},
-	flowWip/.style={
-		draw=gray!80,
-		dashed,
-		-Stealth},
-	flowExisting/.style={
-		draw=gray!80,
-		-Stealth
-	},
+  component/.style={
+    font=\small\itshape,
+    text width = 1.8cm},
+  group/.style={
+    draw=gray!40,
+    dashed,
+  },
+  box/.style={
+    minimum height=1cm,
+    minimum width= 3cm,
+    rounded corners=2pt,
+    draw=gray!80,
+    fill=gray!20
+  },
+  input/.style={
+    box,
+    shape=ellipse,
+  },
+  output/.style={
+    box,
+    shape=tape,
+  },
+  wip/.style={
+    dashed,
+    draw=gray!80,
+    fill=#1!20,
+  },
+  wip/.default={red},
 }
 
 
@@ -146,94 +135,50 @@ verification, analysis and optimization for hardware designs.
 A project which offers a framework for hardware designs and basic support for
 SystemVerilog is Circuit IR Compilers and Tools (CIRCT).
 CIRCT builds on top of Multi-Level Intermediate Representation (MLIR) and
-allows to have different levels of abstraction of the design at the same time.
+allows to have different levels of abstraction of components of the design at
+the same time.
 An advantage of CIRCT's design is the modularity based on a variety of dialects
 and transformation passes, which allows for different input and output formats.
+An overview of CIRCT and the planned extensions is shown in Figure
+\ref{fig:toolOverview}.
 
 \begin{figure}
   \centering
-  \begin{tikzpicture}
-    % input languages
-    \node [component] (inputLanguages) {Input};
-    % input conversion
-    \node [component, below=of inputLanguages] (inputConversion) {Input Conversion};
-    \node [existing, right=of inputConversion] (firrtlParser) {FIRRTLParser};
-    \node [wip, right=of firrtlParser] (yosysParser) {RTL-IR Parser};
-    \node [wip, right=of yosysParser] (slang) {SystemVerilog Parser};
-    \node [group, fit=(firrtlParser) (yosysParser) (slang)] (inputConversionBbox) {};
+  \begin{tikzpicture}[scale=0.9, transform shape]
+    \def\x{0}     % Start x
+    \def\y{0}     % Start y
+    \def\xd{4}    % Grid size x
+    \def\yd{2}    % Grid size y
+    \def\bw{3}    % Box width
+    \def\bh{1}    % Box height
 
-    % input languages (cont. with alignment to input conversion)
-    \node [existing] at (firrtlParser|-inputLanguages) (chisel) {Chisel};
-    \node [wip, align=center] at (yosysParser|-inputLanguages) (yosysrtl) {Yosys\\RTL-IR};
-    \node [existing] at (slang|-inputLanguages) (sv) {SystemVerilog};
-    \node [wip, right=of sv, align=center] (ltlgen) {LTL\\Generator};
-    \node [group, fit=(yosysrtl) (sv) (chisel) (yosysrtl) (sv)] (inputR) {};
+    \node[input]       (inChisel)   at (\x + 1*\xd,   \y - 0*\yd) {Chisel};
+    \node[input]       (inSv)       at (\x + 2*\xd,   \y - 0*\yd) {SystemVerilog};
+    \node[input, wip]  (inSav)      at (\x + 3*\xd,   \y - 0*\yd) {SVA};
+    \node[input, wip]  (inRtlil)    at (\x + 4*\xd,   \y - 0*\yd) {RTLIL};
 
-    % Dialects
-    \node [component,below=of inputConversion] (dialects) {Dialect};
-    \node [existing, below=of firrtlParser] (firrtl) {FIRRTL};
-    \node [existing, below=of slang] (moore) {Moore};
-    \node [group, fit=(firrtl) (moore)] (dialectsR) {};
+    \node[box]         (firrtl)     at (\x + 1*\xd,   \y - 1.5*\yd) {FIRRTL};
+    \node[box, wip]    (slang)      at (\x + 2.5*\xd, \y - 1.5*\yd) {Slang};
+    \node[box, wip]    (yosys)      at (\x + 4*\xd,   \y - 1.5*\yd) {Yosys Frontend};
 
-    % core dialects
-    \node [component,below=2cm of dialects] (coreText) {Core dialects};
-    \node [existing, right=of coreText] (hw) {hw};
-    \node [existing, right=of hw] (comb) {comb};
-    \node [existing, right=of comb] (seq) {seq};
-    \node [wip, right=of seq] (ltl) {ltl};
-    \node [group, fit=(hw) (comb) (seq) (ltl)] (coreR) {};
+    \node[box]         (hw)         at (\x + 1*\xd,   \y - 2.25*\yd) {HW};
+    \node[box]         (seq)        at (\x + 2*\xd,   \y - 2.25*\yd) {Seq};
+    \node[box]         (comb)       at (\x + 3*\xd,   \y - 2.25*\yd) {Comb};
+    \node[box, wip]    (ltl)        at (\x + 4*\xd,   \y - 2.25*\yd) {LTL};
+    \draw[group] (\x + 1.0*\xd - \bw/2 - 1, \y - 0.5*\yd) rectangle (\x + 4*\xd + \bw/2 + 1, \y - 3.0*\yd) node[component, pos=0.1] {CIRCT};
 
-    % output conversion
-    \node [component,below=2cm of coreText] (outputConversion) {Output Conversion};
-    \node [wip, right=of outputConversion] (yosys) {Yosys};
-    \node [existing, right=of yosys] (exportVerilog) {ExportVerilog};
-    \node [existing, right=of exportVerilog] (verilator) {Verilator};
-    \node [wip, right=of verilator] (btor2) {Btor2};
-    \node [group, fit=(yosys) (exportVerilog) (verilator) (btor2)] (outputConversionBbox) {};
-
-    % CIRCT
-    \node [outline, fit=(inputConversionBbox) (coreR) (outputConversionBbox)] (circt) {};
-
-    % Output Language
-    \node [component, below=of outputConversion] (outputLanguages) {Output};
-    \node [wip, below=of yosys, align=center] (verilog) {Synthesizeable\\ Verilog};
-    \node [wip, right=of verilog, align=center] (verilog) {SystemVerilog + SVA};
-
-    % Connect input conversion to dialects
-    \draw [flowWip] (yosysParser.south) to [out=-90, in=90, looseness=0.5] (moore.north);
-    \draw [flowWip] (slang) -- (moore.north);
-    \draw [flowExisting] (firrtlParser) -- (firrtl);
-
-    % Connect dialects to core
-    \draw [flowExisting] (firrtl.south) to [out=-90, in=120, looseness=0.5] (ltl.north);
-    \draw [flowWip] (moore.south) to [out=-90, in=60, looseness=0.5] (ltl.north);
-
-    % Ltl to all output conversions
-    \draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (yosys);
-    \draw [flowExisting] (ltl) to [out=-90, in=90, looseness=0.5] (exportVerilog);
-    \draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (verilator);
-    \draw [flowWip] (ltl) to [out=-90, in=90, looseness=0.5] (btor2);
+    \node[output]      (outSv)      at (\x + 0.5*\xd,   \y - 3.5*\yd) {SystemVerilog};
+    \node[output, wip] (outRtlil)   at (\x + 1.5*\xd,   \y - 3.5*\yd) {RTLIL};
+    \node[output]      (outSimBin)  at (\x + 2.5*\xd,   \y - 3.5*\yd) {Simulation binary};
+    \node[output, wip] (outSimCode) at (\x + 3.5*\xd,   \y - 3.5*\yd) {Simulation code};
+    \node[output]      (systemc)    at (\x + 4.5*\xd,   \y - 3.5*\yd) {SystemC};
   \end{tikzpicture}
-  \caption{LTL dialect as a central component in enabling verification support across a wide range of open source EDA tools.}
+  \caption{Overview of CIRCT and related components of the open-source hardware
+  design tool ecosystem. CIRCT is extended (red) to support SVA via the LTL dialect
+  and propagate the verification information to other tools. Input languages
+  are shown with ellipses, rectangles are components of CIRCT and output
+  formats are given in a tape shape.}
   \label{fig:toolOverview}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \tikzset{normal/.style={minimum width=2cm, minimum height=0.8cm, dashed, draw=black!50}}
-    \def\x{0}
-    \def\y{0}
-    \def\xd{3}
-    \def\yd{1}
-
-    \node[normal] (chisel) at (\x,\y) {Chisel};
-    \node[normal] (svlang) at (\x+\xd,\y) {SystemVerilog};
-    \node[normal] (circt) at (\x+0*\xd,\y-1*\yd) {CIRCT};
-    \node[normal] (yosys) at (\x+0*\xd,\y-2*\yd) {Yosys};
-    \node[normal] (verilator) at (\x+1*\xd,\y-2*\yd) {Verilator};
-  \end{tikzpicture}
-  \caption{Open-source hardware design tool landscape}\label{fig:toolLandscape}
 \end{figure}
 
 In this work, CIRCT will be extended to support linear temporal logic for
