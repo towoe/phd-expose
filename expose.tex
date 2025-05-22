@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{hyperref}
+\usepackage{glossaries}
 \usepackage{multirow}
 \usepackage{svg}
 \usepackage{textcomp}
@@ -65,7 +66,16 @@
 \author{Tobias Wölfel, \href{mailto:tobias.woelfel@hm.edu}{tobias.woelfel@hm.edu}}
 \date{May 2025}
 
-%TODO add acronyms
+\newacronym{ltl}{LTL}{Linear Temporal Logic}
+\newacronym{fpga}{FPGA}{Field-Programmable Gate Array}
+\newacronym{circt}{CIRCT}{Circuit IR Compilers and Tools}
+\newacronym{sva}{SVA}{SystemVerilog Assertion}
+\newacronym{mlir}{MLIR}{Multi-Level Intermediate Representation}
+\newacronym{ast}{AST}{Abstract Syntax Tree}
+\newacronym{fsm}{FSM}{Finite State Machine}
+\newacronym{sere}{SERE}{Sequential Extended Regular Expression}
+
+\makenoidxglossaries
 
 \begin{document}
 \maketitle
@@ -83,14 +93,13 @@ critical.
 With that, design verification is crucial and also ubiquitous, making it a
 critical component in the hardware design process.
 
-One approach to ensuring correct behavior is to specify expected signal sequences and
-verify that the design achieves a particular state following these sequences, as
-illustrated in Figure \ref{fig:sequences}.
-A linear sequence of events can be expressed with concurrent SystemVerilog
-Assertions, which are fundamentally based on linear temporal logic (LTL).
-Concurrent SystemVerilog Assertions are widely supported in proprietary
-industry tools, but support in the open-source semiconductor ecosystem is
-limited.
+One approach to ensuring correct behavior is to specify expected signal
+sequences and verify that the design achieves a particular state following
+these sequences, as illustrated in Figure \ref{fig:sequences}.
+A linear sequence of events can be expressed with concurrent \gls{sva}, which
+are fundamentally based on \gls{ltl}.
+Concurrent \glspl{sva} are widely supported in proprietary industry tools, but
+support in the open-source semiconductor ecosystem is limited.
 As open-source hardware design projects are a major user of the open-source
 tooling, limited support for verification negatively impacts the quality of
 designs and adoption of the tools.
@@ -107,7 +116,7 @@ verification, analysis and optimization for hardware designs.
       @(posedge clk) req |=> resp
     );
     \end{lstlisting}
-    \caption{SystemVerilog Assertion showing that \texttt{req} must be followed
+    \caption{\gls{sva} showing that \texttt{req} must be followed
     by \texttt{resp} in the next cycle.}
   \end{subfigure}
   ~
@@ -137,14 +146,13 @@ verification, analysis and optimization for hardware designs.
 \end{figure}
 
 A project which offers a framework for hardware designs and basic support for
-SystemVerilog is Circuit IR Compilers and Tools (CIRCT)
-\cite{eldridgeMLIRHardwareCompiler2021}.
-CIRCT builds on top of Multi-Level Intermediate Representation (MLIR)
-\cite{lattnerMLIRScalingCompiler2021} and allows to have different levels of
-abstraction of components of the design at the same time.
-An advantage of CIRCT's design is the modularity based on a variety of dialects
+SystemVerilog is \gls{circt} \cite{eldridgeMLIRHardwareCompiler2021}.
+\gls{circt} builds on top of \gls{mlir} \cite{lattnerMLIRScalingCompiler2021}
+and allows to have different levels of abstraction of components of the design
+at the same time.
+An advantage of \gls{circt}'s design is the modularity based on a variety of dialects
 and transformation passes, which allows for different input and output formats.
-An overview of CIRCT and the planned extensions is shown in Figure
+An overview of \gls{circt} and the planned extensions is shown in Figure
 \ref{fig:toolOverview}.
 
 \begin{figure}
@@ -178,15 +186,15 @@ An overview of CIRCT and the planned extensions is shown in Figure
     \node[output, wip] (outSimCode) at (\x + 3.5*\xd,   \y - 3.5*\yd) {Simulation code};
     \node[output]      (systemc)    at (\x + 4.5*\xd,   \y - 3.5*\yd) {SystemC};
   \end{tikzpicture}
-  \caption{Overview of CIRCT and related components of the open-source hardware
-  design tool ecosystem. CIRCT is extended (red) to support SVA via the LTL dialect
+  \caption{Overview of \gls{circt} and related components of the open-source hardware
+  design tool ecosystem. \gls{circt} is extended (red) to support \gls{sva} via the \gls{ltl} dialect
   and propagate the verification information to other tools. Input languages
-  are shown with ellipses, rectangles are components of CIRCT and output
+  are shown with ellipses, rectangles are components of \gls{circt} and output
   formats are given in a tape shape.}
   \label{fig:toolOverview}
 \end{figure}
 
-In this work, CIRCT will be extended to support linear temporal logic for
+In this work, \gls{circt} will be extended to support linear temporal logic for
 multiple input formats.
 In order to make use of the verification for consuming tools, different
 transformation methods will be investigated.
@@ -200,26 +208,26 @@ integrated circuit design process itself.
 
 % Limit: 300 words
 
-CIRCT is actively developed and already has contributions related to this work.
-An approach for temporal logic \cite{pnueliTemporalLogicPrograms1977} in CIRCT
-is introduced in \cite{dobisFormalVerificationHardware2024}, with the LTL
+\gls{circt} is actively developed and already has contributions related to this work.
+An approach for temporal logic \cite{pnueliTemporalLogicPrograms1977} in \gls{circt}
+is introduced in \cite{dobisFormalVerificationHardware2024}, with the \gls{ltl}
 dialect and allows to specify the properties in Chisel
 \cite{bachrachChiselConstructingHardware2012}.
 Chisel is a hardware construction language, which also produces SystemVerilog
 \cite{IEEEStandardSystemVerilog2024} code as an exchange format for other
 tools.
 
-SystemVerilog Assertions are widely used in the industry
+\glspl{sva} are widely used in the industry
 \cite{witharanaSurveyAssertionbasedHardware2022}, but the support in
 open-source tools is limited.
 A widely used open-source tool for synthesis is Yosys \cite{yosys}, which only
-has full SystemVerilog Assertion support in conjunction with the proprietary
+has full \gls{sva} support in conjunction with the proprietary
 tool Verific \cite{verific2025}, the open-source SystemVerilog front-end only
 supports immediate assertions and can not handle temporal logic.
 
-The importance of SystemVerilog assertions, which offer a powerful verification
+The importance of \gls{sva}, which offer a powerful verification
 method to describe the intended behavior of the design, can also be seen by the
-research in generating SystemVerilog Assertions based on different input
+research in generating \gls{sva} based on different input
 vectors.
 This includes tools for module interface verification
 \cite{orenes-veraAutoSVADemocratizingFormal2021}, and recently builds on large
@@ -233,19 +241,19 @@ Traditionally, temporal logic is used in simulation
 but there are also efforts to utilized the assertions in emulation and related
 to this the required transformations \cite{cimattiSymbolicCompilationPSL2008,
 ehlersSymbolicBoundedSynthesis2010, noureddineSynthesisSequentialExtended2014}.
-For a system emulation with the help of an FPGA, this typically relies of
+For a system emulation with the help of a \gls{fpga}, this typically relies of
 transforming the statements to synthesizable hardware and the creation of a
 checker monitor as shown in
 \cite{kastelanSynthesizableSystemVerilogAssertions2009}.
 \cite{bouleEfficientAutomataBasedAssertionChecker2007} demonstrates an
-efficient automata transformations by focusing on SERE, the language used to
-represent the logic statements in SystemVerilog Assertions and shows the
-overhead for different examples when targeting FPGAs.
+efficient automata transformations by focusing on \gls{sere}, the language used to
+represent the logic statements in \gls{sva} and shows the
+overhead for different examples when targeting \glspl{fpga}.
 
 Beyond the traditional usage of assertions and temporal logic, research shows
 how additional purposes can be realized.
 An example which does not rely on assertions, but extracts timing information
-by analyzing finite state machines, makes use of the insights to detect leakage
+by analyzing \gls{fsm}, makes use of the insights to detect leakage
 of secrets \cite{reimannQTFlowQuantitativeTimingSensitive2024}.
 In order to estimate the system power consumption
 \cite{ahujaAssertionBasedModalPower2007} divides the system into different
@@ -263,7 +271,7 @@ verification objectives.
 % Actual: 180 words
 
 % TODO Reformulate this
-The support of linear temporal logic as a method, and SystemVerilog Assertions
+The support of linear temporal logic as a method, and \gls{sva}
 in general is only partially available in open-source hardware design tools.
 With this comes a lack of transformation to analogous representations which can
 be consumed by other tools.
@@ -304,20 +312,21 @@ verification specifications.
 
 The research will be structured into two topics.
 The first part will lead to a suitable representation of the temporal
-descriptions as a dialect in CIRCT, while the second part will focus on making
+descriptions as a dialect in \gls{circt}, while the second part will focus on making
 use of the new representations to find improvements for the hardware design.
 
-In order to consume the SystemVerilog Assertions, the SystemVerilog support of
-CIRCT must be extended.
+In order to consume the \gls{sva}, the SystemVerilog support of \gls{circt}
+must be extended.
 The lexing, parsing and a first elaboration of the SystemVerilog description is
 handled by Slang, a separate project, which comes with a high language feature
 completeness for SystemVerilog, while providing programmatic methods to extract
-information from the generated Abstract Syntax Tree (AST).
-With the design represented in the AST, a translation into CIRCT's dialects
-follows.
-A suitable representation and dialect translation path for SVAs must be found.
-A subset of SVAs may be selected to be supported in the first step, in order to
-ensure progress.
+information from the generated \gls{ast}.
+With the design represented in the \gls{ast}, a translation into \gls{circt}'s
+dialects follows.
+A suitable representation and dialect translation path for \glspl{sva} must be
+found.
+A subset of \glspl{sva} may be selected to be supported in the first step, in
+order to ensure progress.
 % state explosion possible?
 Dialect transformations, if possible and realizable, for different output
 variants will provide new benefits for later stage tools.
@@ -345,7 +354,7 @@ temporal logic.
     \node[draw] at (0,-1) {Simulation: statements};
     \node[draw] at (4,-1) {Formal: BTOR2};
   \end{tikzpicture}
-  \caption{LTL lowering options}\label{fig:ltlLowering}
+  \caption{\gls{ltl} lowering options}\label{fig:ltlLowering}
 \end{figure}
 
 With the new dialect available, research will shift to utilize the added
