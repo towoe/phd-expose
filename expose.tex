@@ -338,12 +338,34 @@ temporal logic.
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \node[draw] at (0,0) {LTL: ref a};
-    \node[draw] at (0,-1) {LTL: ref b};
-    \node[draw] at (0,-2) {LTL: implication, 1, 2};
-    \node[draw] at (0,-3) {LTL: strong eventually, 3};
+    \node[draw, style={gray, fill=gray!20}, text=black] at (0,0) {\textbf{assert (a \#\#1 b $\rightarrow$ c)}};
+    \node[draw, align=left, anchor=east, style={dashed, draw=gray!80}] at (-1, -4) {
+      \%0 = \%clk : clock \\
+      \%1 = a : boolean \\
+      \%2 = b : boolean \\
+      \%3 = c : boolean \\
+      \%4 = delay \%0, 1, \%2 : sequence \\
+      \%5 = concat \%1, \%4 : sequence \\
+      \%6 = implication \%0, \%1, \%4 : property \\
+      \%7 = assert \%6
+    };
+    \node[draw, align=left, anchor=west, style={dashed, draw=gray!80}] at (1,-4) {
+      \%0 = a : boolean \\
+      \%1 = b : boolean \\
+      \%2 = sequence \%clk, \%0, \%1 \{ \\
+        \ \ \%i\_0 delay 1, \%1 : sequence \\
+        \ \ \%i\_1 concat \%0, \%i\_1 : sequence \\
+      \} \\
+      \%3 = c : boolean \\
+      \%4 = property \%clk, \%2, \%3 \{ \\
+        \ \ implication \%2, \%3 : property \\
+      \} \\
+      assert \%4
+    };
   \end{tikzpicture}
-  \caption{Dialect abstraction}\label{fig:dialectAbstraction}
+  \caption{Pseudo example representations of a \gls{sva} statement. A suitable
+  way to represent various statements while also providing a way to transform
+  and analyse the instructions must be found.}\label{fig:dialectAbstraction}
 \end{figure}
 
 \begin{figure}
