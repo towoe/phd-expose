@@ -1,6 +1,7 @@
 \pdfoutput=1
 
 \documentclass[11pt,DIV=16,parskip=half]{scrartcl}
+\usepackage{inconsolata}
 \usepackage{algorithm,algorithmic}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
@@ -111,7 +112,7 @@ verification, analysis and optimization for hardware designs.
   \centering
   \begin{subfigure}[b]{0.35\textwidth}
     \centering
-    \begin{lstlisting}[basicstyle=\sffamily\sffamily\small,
+    \begin{lstlisting}[basicstyle=\ttfamily\small,
                       columns=flexible]
     assert property(
       @(posedge clk) req |=> resp
@@ -123,7 +124,7 @@ verification, analysis and optimization for hardware designs.
   ~
   \begin{subfigure}[b]{0.29\textwidth}
     \centering
-    \begin{tikztimingtable}[timing/font=\small]
+    \begin{tikztimingtable}[timing/font=\ttfamily\small]
       clk   & 10{C} \\
       req   & 2{L} 2{H} 6{L} \\
       resp  & 4{L} 2{H} 4{L} \\
@@ -133,7 +134,7 @@ verification, analysis and optimization for hardware designs.
   ~
   \begin{subfigure}[b]{0.29\textwidth}
     \centering
-    \begin{tikztimingtable}[timing/font=\small]
+    \begin{tikztimingtable}[timing/font=\ttfamily\small]
       clk   & 10{C} \\
       req   & 2{L} 2{H} 6{L} \\
       resp  & 6{L} 2{H} 2{L} \\
@@ -340,7 +341,7 @@ temporal logic.
   \centering
   \begin{tikzpicture}
     \node[box, minimum width=5cm, text=black] at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
-    \node[draw, align=left, anchor=east, style={dashed, draw=gray!80}] at (-1, -4) {
+    \node[draw, align=left, anchor=east, style={dashed, draw=gray!80}, font=\ttfamily\footnotesize] at (-1, -4) {
       \%0 = \%clk : clock \\
       \%1 = a : boolean \\
       \%2 = b : boolean \\
@@ -350,7 +351,7 @@ temporal logic.
       \%6 = implication \%0, \%1, \%4 : property \\
       \%7 = assert \%6
     };
-    \node[draw, align=left, anchor=west, style={dashed, draw=gray!80}] at (1,-4) {
+    \node[draw, align=left, anchor=west, style={dashed, draw=gray!80}, font=\ttfamily\footnotesize] at (1,-4) {
       \%0 = a : boolean \\
       \%1 = b : boolean \\
       \%2 = sequence \%clk, \%0, \%1 \{ \\
