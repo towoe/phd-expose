@@ -87,11 +87,11 @@
 % Actual: 216 words
 
 Hardware designs are increasingly complex due to advances in fabrication
-technology and specialized solutions resulting in higher costs, both in the
-design and fabrication phase.
+technology and larger systems resulting in higher costs, both in the
+design and fabrication phases.
 To ensure correctness of the design, verification is crucial.
-Design and verification tools need to handle the increased complexity and offer
-new innovations.
+Design and verification tools need to handle the increased complexity and
+provide more capable methods.
 
 One method ensuring correct behavior is to specify expected signal sequences
 and verify that the design exhibits particular states following these
@@ -102,7 +102,8 @@ While \gls{sva} are widely supported in proprietary industry tools, support in
 the open-source semiconductor ecosystem is limited, negatively impacting design
 quality and tool adoption.
 This limitation also prevents research in temporal logic for hardware
-verification, analysis and optimization.
+verification, analysis and optimization, as there are no common tools available
+to build on.
 
 \begin{figure}
   \centering
@@ -195,8 +196,8 @@ An overview of \gls{circt} and the planned extensions is shown in Figure
 This work extends \gls{circt} to support linear temporal logic across multiple
 input formats and investigates transformation methods to make verification
 properties accessible to consuming tools.
-Research focuses on temporal logic representation and abstractions to leverage
-verification information for improving the integrated circuit design process.
+Research focuses on temporal logic abstractions to leverage verification
+information for improving the integrated circuit design process.
 
 \section{Related Work}
 % related work and state of the art
@@ -218,8 +219,9 @@ tools.
 open-source tools is limited.
 A widely used open-source tool for synthesis is Yosys \cite{yosys}, which only
 has full \gls{sva} support in conjunction with the proprietary
-tool Verific \cite{verific2025}, the open-source SystemVerilog front-end only
-supports immediate assertions and can not handle temporal logic.
+tool Verific \cite{verific2025}.
+The open-source SystemVerilog front-end only supports immediate assertions and
+can not handle temporal logic.
 
 The importance of \gls{sva}, which offer a powerful verification
 method to describe the intended behavior of the design, can also be seen by the
@@ -237,12 +239,11 @@ Traditionally, temporal logic is used in simulation
 but there are also efforts to utilize the assertions in emulation and related
 to this the required transformations \cite{cimattiSymbolicCompilationPSL2008,
 ehlersSymbolicBoundedSynthesis2010, noureddineSynthesisSequentialExtended2014}.
-For a system emulation with the help of a \gls{fpga}, this typically relies on
-transforming the statements to synthesizable hardware and the creation of a
-checker monitor as shown in
-\cite{kastelanSynthesizableSystemVerilogAssertions2009}.
+For a system emulation with a \gls{fpga}, this typically relies on transforming
+the statements to synthesizable hardware and the creation of a checker monitor
+as shown in \cite{kastelanSynthesizableSystemVerilogAssertions2009}.
 \cite{bouleEfficientAutomataBasedAssertionChecker2007} demonstrates an
-efficient automata transformations by focusing on \gls{sere}, the language used to
+efficient automata transformation by focusing on \gls{sere}, the language used to
 represent the logic statements in \gls{sva} and shows the
 overhead for different examples when targeting \glspl{fpga}.
 
@@ -251,9 +252,9 @@ how additional purposes can be realized.
 An example that does not rely on assertions, but extracts timing information
 by analyzing \gls{fsm}, makes use of the insights to detect leakage
 of secrets \cite{reimannQTFlowQuantitativeTimingSensitive2024}.
-In order to estimate the system power consumption
-\cite{ahujaAssertionBasedModalPower2007} divides the system into different
-operation modes, based on descriptions given in assertion properties.
+In order to estimate the system power consumption divides the system into
+different operation modes, based on descriptions given in assertion properties
+\cite{ahujaAssertionBasedModalPower2007}.
 Both examples demonstrate how timing information, derived or explicitly
 defined, can be utilized for analytical purposes beyond traditional
 verification objectives.
@@ -266,9 +267,8 @@ verification objectives.
 % Limit: 150 words
 % Actual: 180 words
 
-The support of linear temporal logic and \gls{sva} is only partially available
-in open-source hardware design tools, limiting transformation to representation
-consumable by other tools.
+Support for linear temporal logic and \gls{sva} is only partially available
+in open-source hardware design tools.
 Without an environment where hardware designs are represented alongside
 temporal properties, research in hardware design analysis and optimization
 based on signal sequences is not possible.
@@ -318,11 +318,11 @@ dialects follows.
 A suitable representation and dialect translation path for \glspl{sva} must be
 found, an example of different representations is shown in Figure
 \ref{fig:dialectAbstraction}.
-Dialect transformations, if possible and realizable, for different output
-variants will provide new benefits for later stage tools.
+Dialect transformations, if possible, for different output variants will
+provide new benefits for later stage tools.
 As shown in Figure \ref{fig:svaTransformations}, the temporal representation
 can be used for different purposes, but the transformations might require
-additional dialects and passes, in order to represent the different forms.
+additional dialects and passes to represent the different forms.
 In this stage, research will focus on finding an optimal representation of the
 temporal logic.
 
@@ -443,15 +443,13 @@ investigates the utilization of the newly added information.
 A potential use case is the analysis of the design based on the verification
 statements.
 A relation between the temporal properties and the design structures is
-established and stored with annotations in order to pass it along to other
-tools.
+established and stored with annotations to pass it along to other tools.
 Another possibility is design optimization.
 Again, based on the temporal properties, an optimization might be possible on
 the utilized cells and the connections between them, making use of different
 abstraction levels to leverage various design specifications.
 Combining the optimization with the temporal logic dialect will provide
-feedback on the suitability of the representation formulated in the first part
-of the research project.
+feedback on the suitability of the representation found in the first phase.
 
 The research merits a Dr.-Ing. degree through two contributions to electronic
 design automation for integrated circuits.
