@@ -180,7 +180,8 @@ An overview of \gls{circt} and the planned extensions is shown in Figure
     \node[box]         (seq)        at (\x + 2*\xd,   \y - 2.25*\yd) {Seq};
     \node[box]         (comb)       at (\x + 3*\xd,   \y - 2.25*\yd) {Comb};
     \node[box, wip]    (ltl)        at (\x + 4*\xd,   \y - 2.25*\yd) {LTL};
-    \draw[group] (\x + 1.0*\xd - \bw/2 - 1, \y - 0.5*\yd) rectangle (\x + 4*\xd + \bw/2 + 1, \y - 3.0*\yd) node[component, pos=0.1] {CIRCT};
+    \draw[group] (\x + 1.0*\xd - \bw/2 - 1, \y - 0.5*\yd) rectangle (\x + 4*\xd
+    + \bw/2 + 1, \y - 3.0*\yd) node[component, pos=0.1] {CIRCT};
 
     \node[output]      (outSv)      at (\x + 0.5*\xd,   \y - 3.5*\yd) {SystemVerilog};
     \node[output, wip] (outRtlil)   at (\x + 1.5*\xd,   \y - 3.5*\yd) {RTLIL};
@@ -188,11 +189,12 @@ An overview of \gls{circt} and the planned extensions is shown in Figure
     \node[output, wip] (outSimCode) at (\x + 3.5*\xd,   \y - 3.5*\yd) {Simulation code};
     \node[output]      (systemc)    at (\x + 4.5*\xd,   \y - 3.5*\yd) {SystemC};
   \end{tikzpicture}
-  \caption{Overview of \gls{circt} and related components of the open-source hardware
-  design tool ecosystem. \gls{circt} is extended (red) to support \gls{sva} via the \gls{ltl} dialect
-  and propagate the verification information to other tools. Input languages
-  are shown with ellipses, rectangles are components of \gls{circt} and output
-  formats are given in a tape shape.}
+  \caption{Overview of \gls{circt} and related components of the open-source
+  hardware design tool ecosystem. \gls{circt} is extended (red) to support
+  \gls{sva} via the \gls{ltl} dialect and propagate the verification
+  information to other tools. Input languages are shown with ellipses,
+  rectangles are components of \gls{circt} and output formats are given in a
+  tape shape.}
   \label{fig:toolOverview}
 \end{figure}
 
@@ -314,8 +316,9 @@ verification specifications.
 
 The research will be structured into two topics.
 The first part will lead to a suitable representation of the temporal
-descriptions as a dialect in \gls{circt}, while the second part will focus on making
-use of the new representations to find improvements for the hardware design.
+descriptions as a dialect in \gls{circt}, while the second part will focus on
+making use of the new representations to find improvements for the hardware
+design.
 
 In order to consume the \gls{sva}, the SystemVerilog support of \gls{circt}
 must be extended.
@@ -340,8 +343,10 @@ temporal logic.
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \node[box, minimum width=5cm, text=black] at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
-    \node[draw, align=left, anchor=east, style={dashed, draw=gray!80}, font=\ttfamily\footnotesize] at (-1, -4) {
+    \node[box, minimum width=5cm, text=black] at (0,0) {\texttt{assert (a \#\#1
+    b $\rightarrow$ c)}};
+    \node[draw, align=left, anchor=east, style={dashed, draw=gray!80},
+    font=\ttfamily\footnotesize] at (-1, -4) {
       \%0 = \%clk : clock \\
       \%1 = a : boolean \\
       \%2 = b : boolean \\
@@ -351,7 +356,8 @@ temporal logic.
       \%6 = implication \%0, \%1, \%4 : property \\
       \%7 = assert \%6
     };
-    \node[draw, align=left, anchor=west, style={dashed, draw=gray!80}, font=\ttfamily\footnotesize] at (1,-4) {
+    \node[draw, align=left, anchor=west, style={dashed, draw=gray!80},
+    font=\ttfamily\footnotesize] at (1,-4) {
       \%0 = a : boolean \\
       \%1 = b : boolean \\
       \%2 = sequence \%clk, \%0, \%1 \{ \\
@@ -375,11 +381,15 @@ temporal logic.
   \begin{tikzpicture}
     \def\ydistance{-6}
 
-    \node[box, minimum width=5cm, text=black] (sva_stmt) at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
+    \node[box, minimum width=5cm, text=black] (sva_stmt) at (0,0)
+    {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
     \node[box, wip, minimum width=5cm, text=black] (ltl) at (0,-1.5) {LTL IR};
 
-    \node[draw, fill=gray!20, dashed, draw=gray!80, anchor=center, label={[yshift=0.2cm]above:{\footnotesize Logic}}, minimum height=3cm] (logic) at (-5.5, \ydistance){
-      \begin{tikzpicture}[circuit logic IEC, every path/.style={solid}, every node/.style={font=\small, solid}]
+    \node[draw, fill=gray!20, dashed, draw=gray!80, anchor=center,
+    label={[yshift=0.2cm]above:{\footnotesize Logic}}, minimum height=3cm]
+    (logic) at (-5.5, \ydistance){
+      \begin{tikzpicture}[circuit logic IEC, every path/.style={solid}, every
+        node/.style={font=\small, solid}]
         \node (a) at (0, 0) {a};
         \node (b) at (0, -1) {b};
         \node (c) at (0, -2) {c};
@@ -401,7 +411,10 @@ temporal logic.
       \end{tikzpicture}
     };
 
-    \node[draw, style={dashed, draw=gray!80, fill=gray!20}, align=left, anchor=center, text width=4cm, label={[yshift=0.2cm]above:{\footnotesize Simulation}}, minimum width=4cm, minimum height=1.5cm] (sim) at (0, \ydistance) {
+    \node[draw, style={dashed, draw=gray!80, fill=gray!20}, align=left,
+    anchor=center, text width=4cm, label={[yshift=0.2cm]above:{\footnotesize
+    Simulation}}, minimum width=4cm, minimum height=1.5cm] (sim) at (0,
+    \ydistance) {
       \scriptsize
       \texttt{property p\_a1bc;\\
         @(posedge clk)\\
@@ -410,7 +423,9 @@ temporal logic.
         assert property (p\_a1bc);}
     };
 
-    \node[draw, style={dashed, draw=gray!80}, fill=gray!20, align=left, anchor=center, text width=5cm, label={[yshift=0.2cm]above:{\footnotesize Formal Model}}] (formal) at (5.5, \ydistance) {
+    \node[draw, style={dashed, draw=gray!80}, fill=gray!20, align=left,
+    anchor=center, text width=5cm, label={[yshift=0.2cm]above:{\footnotesize
+    Formal Model}}] (formal) at (5.5, \ydistance) {
       \scriptsize
       \texttt{1 sort bitvec 1\\
       2 input 1 \\
@@ -431,7 +446,8 @@ temporal logic.
     \draw[->, dashed, draw=gray] (ltl) -- (formal.north);
 
   \end{tikzpicture}
-  \caption{Representations of an \gls{sva} assertion for various processing domains.}\label{fig:svaRepresentations}
+  \caption{Representations of an \gls{sva} assertion for various processing
+  domains.}\label{fig:svaRepresentations}
 \end{figure}
 
 With the new dialect available, research will shift to utilize the added
@@ -445,7 +461,8 @@ Another possibility may be in design optimization.
 Again, based on the temporal properties, which provide additional information
 for the signals, an optimization might be possible on the utilized cells and
 the connections between them.
-The optimization might be possible at different levels of abstraction of the hardware.
+The optimization might be possible at different levels of abstraction of the
+hardware.
 Combining the optimization with the temporal logic dialect will provide
 feedback on the suitability of the representation formulated in the first part
 of the research project.
