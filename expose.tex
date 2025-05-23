@@ -234,10 +234,10 @@ sunImprovingVerificationProductivity2023} and specialized tests
 
 Traditionally, temporal logic is used in simulation
 \cite{habibiExtensionSystemCSystemVerilog2004, dahanCombiningSystemLevel2005},
-but there are also efforts to utilized the assertions in emulation and related
+but there are also efforts to utilize the assertions in emulation and related
 to this the required transformations \cite{cimattiSymbolicCompilationPSL2008,
 ehlersSymbolicBoundedSynthesis2010, noureddineSynthesisSequentialExtended2014}.
-For a system emulation with the help of a \gls{fpga}, this typically relies of
+For a system emulation with the help of a \gls{fpga}, this typically relies on
 transforming the statements to synthesizable hardware and the creation of a
 checker monitor as shown in
 \cite{kastelanSynthesizableSystemVerilogAssertions2009}.
@@ -248,7 +248,7 @@ overhead for different examples when targeting \glspl{fpga}.
 
 Beyond the traditional usage of assertions and temporal logic, research shows
 how additional purposes can be realized.
-An example which does not rely on assertions, but extracts timing information
+An example that does not rely on assertions, but extracts timing information
 by analyzing \gls{fsm}, makes use of the insights to detect leakage
 of secrets \cite{reimannQTFlowQuantitativeTimingSensitive2024}.
 In order to estimate the system power consumption
@@ -266,17 +266,14 @@ verification objectives.
 % Limit: 150 words
 % Actual: 180 words
 
-% TODO Reformulate this
-The support of linear temporal logic as a method, and \gls{sva}
-in general is only partially available in open-source hardware design tools.
-With this comes a lack of transformation to analogous representations which can
-be consumed by other tools.
-As there is also no available environment in which a hardware design is
-represented in conjunction with the temporal properties, no research is
-possible in the area of hardware design analysis and optimization based on
-signal sequences.
+The support of linear temporal logic and \gls{sva} is only partially available
+in open-source hardware design tools, limiting transformation to representation
+consumable by other tools.
+Without an environment where hardware designs are represented alongside
+temporal properties, research in hardware design analysis and optimization
+based on signal sequences is not possible.
 
-This thesis focuses on the benefits of temporal logic for hardware designs in
+This thesis focuses on enabling temporal logic benefits for hardware designs in
 open-source design tools.
 
 To achieve this goal, the following main research questions must be addressed:
@@ -306,29 +303,26 @@ verification specifications.
 % Limit: 500 words
 % Actual: 423 words
 
-The research will be structured into two topics.
-The first part will lead to a suitable representation of the temporal
-descriptions as a dialect in \gls{circt}, while the second part will focus on
-making use of the new representations to find improvements for the hardware
-design.
+The research is structured into two phases: developing a suitable temporal
+logic representation within \gls{circt}'s dialect framework, followed by
+leveraging these representations for hardware design optimization and analysis.
 
 In order to consume the \gls{sva}, the SystemVerilog support of \gls{circt}
 must be extended.
-The lexing, parsing and a first elaboration of the SystemVerilog description is
-handled by Slang, a separate project, which comes with a high language feature
+The lexing, parsing and elaboration of the SystemVerilog description is handled
+by Slang, a separate project, which comes with a high language feature
 completeness for SystemVerilog, while providing programmatic methods to extract
 information from the generated \gls{ast}.
 With the design represented in the \gls{ast}, a translation into \gls{circt}'s
 dialects follows.
 A suitable representation and dialect translation path for \glspl{sva} must be
-found.
-A subset of \glspl{sva} may be selected to be supported in the first step, in
-order to ensure progress.
-% state explosion possible?
+found, an example of different representations is shown in Figure
+\ref{fig:dialectAbstraction}.
 Dialect transformations, if possible and realizable, for different output
 variants will provide new benefits for later stage tools.
-The transformations might require additional dialects in order to represent
-different forms of matching sequences and condition verifiers.
+As shown in Figure \ref{fig:svaTransformations}, the temporal representation
+can be used for different purposes, but the transformations might require
+additional dialects and passes, in order to represent the different forms.
 In this stage, research will focus on finding an optimal representation of the
 temporal logic.
 
@@ -337,7 +331,7 @@ temporal logic.
   \begin{tikzpicture}
     \node[box, minimum width=5cm, text=black] at (0,0) {\texttt{assert (a \#\#1
     b $\rightarrow$ c)}};
-    \node[draw, align=left, anchor=east, style={dashed, draw=gray!80},
+    \node[draw, wip, align=left, anchor=east, style={dashed, draw=gray!80},
     font=\ttfamily\footnotesize] at (-1, -4) {
       \%0 = \%clk : clock \\
       \%1 = a : boolean \\
@@ -348,7 +342,7 @@ temporal logic.
       \%6 = implication \%0, \%1, \%4 : property \\
       \%7 = assert \%6
     };
-    \node[draw, align=left, anchor=west, style={dashed, draw=gray!80},
+    \node[draw, wip, align=left, anchor=west, style={dashed, draw=gray!80},
     font=\ttfamily\footnotesize] at (1,-4) {
       \%0 = a : boolean \\
       \%1 = b : boolean \\
@@ -408,11 +402,11 @@ temporal logic.
     Simulation}}, minimum width=4cm, minimum height=1.5cm] (sim) at (0,
     \ydistance) {
       \scriptsize
-      \texttt{property p\_a1bc;\\
+      \texttt{property p1;\\
         @(posedge clk)\\
         \ \ a \#\#1 b |-> c;\\
         endproperty\\
-        assert property (p\_a1bc);}
+        assert property (p1);}
     };
 
     \node[draw, style={dashed, draw=gray!80}, fill=gray!20, align=left,
@@ -438,34 +432,26 @@ temporal logic.
     \draw[->, dashed, draw=gray] (ltl) -- (formal.north);
 
   \end{tikzpicture}
-  \caption{Representations of an \gls{sva} assertion for various processing
-  domains.}\label{fig:svaRepresentations}
+  \caption{The representation of the temporal logic should allow for different
+  transformation passes for various output formats. This can include a logical
+  description for a synthesizable version, an emission for simulation or for
+  formal verification.}\label{fig:svaTransformations}
 \end{figure}
 
-With the new dialect available, research will shift to utilize the added
-information.
-One possibility of extracting new insights lies in the analysis of the logic
-elements described by the temporal properties.
-For this a relation between the verification and the design has to be found,
-together with a way of annotating the findings as well as how this can be used
-by other tools.
-Another possibility may be in design optimization.
-Again, based on the temporal properties, which provide additional information
-for the signals, an optimization might be possible on the utilized cells and
-the connections between them.
-The optimization might be possible at different levels of abstraction of the
-hardware.
+Following the formulation of the dialect and passes, the second phase
+investigates the utilization of the newly added information.
+A potential use case is the analysis of the design based on the verification
+statements.
+A relation between the temporal properties and the design structures is
+established and stored with annotations in order to pass it along to other
+tools.
+Another possibility is design optimization.
+Again, based on the temporal properties, an optimization might be possible on
+the utilized cells and the connections between them, making use of different
+abstraction levels to leverage various design specifications.
 Combining the optimization with the temporal logic dialect will provide
 feedback on the suitability of the representation formulated in the first part
 of the research project.
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \node[draw] at (0,0) {$c = a \lor b$};
-  \end{tikzpicture}
-  \caption{Temporal logic utilization}\label{}
-\end{figure}
 
 The research merits a Dr.-Ing. degree through two contributions to electronic
 design automation for integrated circuits.
