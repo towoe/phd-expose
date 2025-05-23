@@ -339,7 +339,7 @@ temporal logic.
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \node[draw, style={gray, fill=gray!20}, text=black] at (0,0) {\textbf{assert (a \#\#1 b $\rightarrow$ c)}};
+    \node[box, minimum width=5cm, text=black] at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
     \node[draw, align=left, anchor=east, style={dashed, draw=gray!80}] at (-1, -4) {
       \%0 = \%clk : clock \\
       \%1 = a : boolean \\
@@ -372,9 +372,12 @@ temporal logic.
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \node[draw, text=black, fill=gray!10] (sva_stmt) at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
+    \def\ydistance{-6}
 
-    \node[draw, dashed, draw=gray!80, anchor=center, label={[yshift=0.2cm]above:\textbf{Logic}}, minimum height=3cm] (fsm) at (-5.5, -5){
+    \node[box, minimum width=5cm, text=black] (sva_stmt) at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
+    \node[box, wip, minimum width=5cm, text=black] (ltl) at (0,-1.5) {LTL IR};
+
+    \node[draw, fill=gray!20, dashed, draw=gray!80, anchor=center, label={[yshift=0.2cm]above:{\footnotesize Logic}}, minimum height=3cm] (logic) at (-5.5, \ydistance){
       \begin{tikzpicture}[circuit logic IEC, every path/.style={solid}, every node/.style={font=\small, solid}]
         \node (a) at (0, 0) {a};
         \node (b) at (0, -1) {b};
@@ -397,7 +400,7 @@ temporal logic.
       \end{tikzpicture}
     };
 
-    \node[draw, style={dashed, draw=gray!80}, align=left, anchor=center, text width=4cm, label={[yshift=0.2cm]above:\textbf{Simulation}}, minimum width=4cm, minimum height=1.5cm] (sim) at (0, -5) {
+    \node[draw, style={dashed, draw=gray!80, fill=gray!20}, align=left, anchor=center, text width=4cm, label={[yshift=0.2cm]above:{\footnotesize Simulation}}, minimum width=4cm, minimum height=1.5cm] (sim) at (0, \ydistance) {
       \scriptsize
       \texttt{property p\_a1bc;\\
         @(posedge clk)\\
@@ -406,7 +409,7 @@ temporal logic.
         assert property (p\_a1bc);}
     };
 
-    \node[draw, style={dashed, draw=gray!80}, align=left, anchor=center, text width=5cm, label={[yshift=0.2cm]above:\textbf{Formal Model}}] (formal) at (5.5, -5) {
+    \node[draw, style={dashed, draw=gray!80}, fill=gray!20, align=left, anchor=center, text width=5cm, label={[yshift=0.2cm]above:{\footnotesize Formal Model}}] (formal) at (5.5, \ydistance) {
       \scriptsize
       \texttt{1 sort bitvec 1\\
       2 input 1 \\
@@ -420,6 +423,12 @@ temporal logic.
       10 not 1 9 \\
       11 bad 10 }\\
     };
+
+    \draw[->, dashed, draw=gray] (sva_stmt) -- (ltl);
+    \draw[->, dashed, draw=gray] (ltl) -- (logic.north);
+    \draw[->, dashed, draw=gray] (ltl) -- (sim);
+    \draw[->, dashed, draw=gray] (ltl) -- (formal.north);
+
   \end{tikzpicture}
   \caption{Representations of an \gls{sva} assertion for various processing domains.}\label{fig:svaRepresentations}
 \end{figure}
