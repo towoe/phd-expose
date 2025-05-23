@@ -371,12 +371,51 @@ temporal logic.
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \node[draw] at (0,0) {LTL: eventually a implies b};
-    \node[draw] at (-4,-1) {Synth: FSM};
-    \node[draw] at (0,-1) {Simulation: statements};
-    \node[draw] at (4,-1) {Formal: BTOR2};
+    \node[draw, text=black, fill=gray!10] (sva_stmt) at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
+
+    \node[draw, align=left, anchor=east, text width=6cm, label={[yshift=0.2cm]above:\textbf{State Machine (SystemVerilog)}}, minimum width=5cm, minimum height=5cm] (fsm) at (-3, -5){
+      \scriptsize
+      \texttt{module sva\_fsm (\\
+      input logic a, b, c, clk, reset,\\
+        output logic bad\\
+      );}\\
+      \texttt{  logic a\_prev;}\\
+      \texttt{  always\_ff @(posedge clk or posedge reset) begin}\\
+      \texttt{    if (reset) begin}\\
+      \texttt{    \ \  a\_prev <= 1'b0;}\\
+      \texttt{    end else begin}\\
+      \texttt{    \ \  a\_prev <= a;}\\
+      \texttt{    end}\\
+      \texttt{  end}\\
+      \texttt{  assign bad = a\_prev \& b \& \~{}c;}\\
+      \texttt{endmodule}
+    };
+
+    \node[draw, align=left, anchor=center, text width=4cm, label={[yshift=0.2cm]above:\textbf{Simulation}}, minimum height=1.5cm] (sim) at (0, -5) {
+      \scriptsize
+      \texttt{property p\_a1bc;\\
+        @(posedge clk)\\
+        \ \ a \#\#1 b |-> c;\\
+        endproperty\\
+        assert property (p\_a1bc);}
+    };
+
+    \node[draw, align=left, anchor=west, text width=5cm, label={[yshift=0.2cm]above:\textbf{Formal Model}}] (formal) at (3, -5) {
+      \scriptsize
+      \texttt{1 sort bitvec 1\\
+      2 input 1 \\
+      3 input 1 \\
+      4 input 1 \\
+      5 state 1 \\
+      6 init 1 0 \\
+      7 next 1 2 \\
+      8 and 1 5 3 \\
+      9 implies 1 8 4 \\
+      10 not 1 9 \\
+      11 bad 10 }\\
+    };
   \end{tikzpicture}
-  \caption{\gls{ltl} lowering options}\label{fig:ltlLowering}
+  \caption{Representations of an \gls{sva} assertion for various processing domains.}\label{fig:svaRepresentations}
 \end{figure}
 
 With the new dialect available, research will shift to utilize the added
