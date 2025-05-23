@@ -13,7 +13,8 @@
 \usepackage[svgnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, positioning, arrows, arrows.meta,
-  decorations, decorations.pathmorphing, backgrounds, fit, petri, chains, shapes.symbols}
+  decorations, decorations.pathmorphing, backgrounds, fit, petri, chains,
+  shapes.symbols, circuits.logic.IEC}
 \usepackage{tikz-timing}
 \usetikztiminglibrary[rising arrows]{clockarrows}
 \usetikztiminglibrary{columntype}
@@ -373,25 +374,30 @@ temporal logic.
   \begin{tikzpicture}
     \node[draw, text=black, fill=gray!10] (sva_stmt) at (0,0) {\texttt{assert (a \#\#1 b $\rightarrow$ c)}};
 
-    \node[draw, align=left, anchor=east, text width=6cm, label={[yshift=0.2cm]above:\textbf{State Machine (SystemVerilog)}}, minimum width=5cm, minimum height=5cm] (fsm) at (-3, -5){
-      \scriptsize
-      \texttt{module sva\_fsm (\\
-      input logic a, b, c, clk, reset,\\
-        output logic bad\\
-      );}\\
-      \texttt{  logic a\_prev;}\\
-      \texttt{  always\_ff @(posedge clk or posedge reset) begin}\\
-      \texttt{    if (reset) begin}\\
-      \texttt{    \ \  a\_prev <= 1'b0;}\\
-      \texttt{    end else begin}\\
-      \texttt{    \ \  a\_prev <= a;}\\
-      \texttt{    end}\\
-      \texttt{  end}\\
-      \texttt{  assign bad = a\_prev \& b \& \~{}c;}\\
-      \texttt{endmodule}
+    \node[draw, dashed, draw=gray!80, anchor=center, label={[yshift=0.2cm]above:\textbf{Logic}}, minimum height=3cm] (fsm) at (-5.5, -5){
+      \begin{tikzpicture}[circuit logic IEC, every path/.style={solid}, every node/.style={font=\small, solid}]
+        \node (a) at (0, 0) {a};
+        \node (b) at (0, -1) {b};
+        \node (c) at (0, -2) {c};
+
+        \node[buffer gate, draw, logic gate inputs=none] (buf) at (0.75,  0.00) {};
+        \node[and gate, draw, logic gate inputs=nn] (and1)     at (2.00, -0.5) {};
+        \node[not gate, draw, logic gate inputs=nn] (not1)     at (0.75, -2.00) {};
+        \node[and gate, draw, logic gate inputs=nn] (and2)     at (3.25, -1.00) {};
+
+        \node (bad) at (4.25, -1.0) {bad};
+
+        \draw (a) -- (buf.input);
+        \draw (buf.output) -- ++(0.25,0) |- (and1.input 1);
+        \draw (b) -- ++(1,0) |- (and1.input 2);
+        \draw (c) -- (not1.input);
+        \draw (and1.output) -- ++(0.25,0) |- (and2.input 1);
+        \draw (not1.output) -- ++(0.25,0) |- (and2.input 2);
+        \draw (and2.output) -- (bad);
+      \end{tikzpicture}
     };
 
-    \node[draw, align=left, anchor=center, text width=4cm, label={[yshift=0.2cm]above:\textbf{Simulation}}, minimum height=1.5cm] (sim) at (0, -5) {
+    \node[draw, style={dashed, draw=gray!80}, align=left, anchor=center, text width=4cm, label={[yshift=0.2cm]above:\textbf{Simulation}}, minimum width=4cm, minimum height=1.5cm] (sim) at (0, -5) {
       \scriptsize
       \texttt{property p\_a1bc;\\
         @(posedge clk)\\
@@ -400,7 +406,7 @@ temporal logic.
         assert property (p\_a1bc);}
     };
 
-    \node[draw, align=left, anchor=west, text width=5cm, label={[yshift=0.2cm]above:\textbf{Formal Model}}] (formal) at (3, -5) {
+    \node[draw, style={dashed, draw=gray!80}, align=left, anchor=center, text width=5cm, label={[yshift=0.2cm]above:\textbf{Formal Model}}] (formal) at (5.5, -5) {
       \scriptsize
       \texttt{1 sort bitvec 1\\
       2 input 1 \\
