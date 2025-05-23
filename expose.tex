@@ -84,29 +84,25 @@
 
 \section{Introduction}
 % Limit: 150 words
-% Actual: 299 words
+% Actual: 216 words
 
-Hardware designs are getting more complex and diverse as fabrication technology
-evolves and specialized solutions offer a competitive advantage.
-This complexity must be handled by the design tools as well as the verification
-flow.
-Due to the increasing complexity and the associated costs, a correct design is
-critical.
-With that, design verification is crucial and also ubiquitous, making it a
-critical component in the hardware design process.
+Hardware designs are increasingly complex due to advances in fabrication
+technology and specialized solutions resulting in higher costs, both in the
+design and fabrication phase.
+To ensure correctness of the design, verification is crucial.
+Design and verification tools need to handle the increased complexity and offer
+new innovations.
 
-One approach to ensuring correct behavior is to specify expected signal
-sequences and verify that the design achieves a particular state following
-these sequences, as illustrated in Figure \ref{fig:sequences}.
-A linear sequence of events can be expressed with concurrent \gls{sva}, which
-are fundamentally based on \gls{ltl}.
-Concurrent \glspl{sva} are widely supported in proprietary industry tools, but
-support in the open-source semiconductor ecosystem is limited.
-As open-source hardware design projects are a major user of the open-source
-tooling, limited support for verification negatively impacts the quality of
-designs and adoption of the tools.
-Additionally, it prevents research in the area of temporal logic for
-verification, analysis and optimization for hardware designs.
+One method ensuring correct behavior is to specify expected signal sequences
+and verify that the design exhibits particular states following these
+sequences, as illustrated in Figure \ref{fig:sequences}.
+Concurrent \glspl{sva}, fundamentally based on \gls{ltl}, provide a powerful
+way to express such temporal properties.
+While \gls{sva} are widely supported in proprietary industry tools, support in
+the open-source semiconductor ecosystem is limited, negatively impacting design
+quality and tool adoption.
+This limitation also prevents research in temporal logic for hardware
+verification, analysis and optimization.
 
 \begin{figure}
   \centering
@@ -147,13 +143,11 @@ verification, analysis and optimization for hardware designs.
   must result in an asserted \texttt{resp}).}\label{fig:sequences}
 \end{figure}
 
-A project which offers a framework for hardware designs and basic support for
-SystemVerilog is \gls{circt} \cite{eldridgeMLIRHardwareCompiler2021}.
-\gls{circt} builds on top of \gls{mlir} \cite{lattnerMLIRScalingCompiler2021}
-and allows to have different levels of abstraction of components of the design
-at the same time.
-An advantage of \gls{circt}'s design is the modularity based on a variety of dialects
-and transformation passes, which allows for different input and output formats.
+\gls{circt} \cite{eldridgeMLIRHardwareCompiler2021} offers a framework for
+hardware designs with basic SystemVerilog support.
+Built on \gls{mlir} \cite{lattnerMLIRScalingCompiler2021}, \gls{circt} enables
+multi-level abstractions and provides modular transformation passes for
+different input and output formats.
 An overview of \gls{circt} and the planned extensions is shown in Figure
 \ref{fig:toolOverview}.
 
@@ -198,13 +192,11 @@ An overview of \gls{circt} and the planned extensions is shown in Figure
   \label{fig:toolOverview}
 \end{figure}
 
-In this work, \gls{circt} will be extended to support linear temporal logic for
-multiple input formats.
-In order to make use of the verification for consuming tools, different
-transformation methods will be investigated.
-Research will focus on representation formats and abstractions for temporal
-logic, with the goal of leveraging this verification information to improve the
-integrated circuit design process itself.
+This work extends \gls{circt} to support linear temporal logic across multiple
+input formats and investigates transformation methods to make verification
+properties accessible to consuming tools.
+Research focuses on temporal logic representation and abstractions to leverage
+verification information for improving the integrated circuit design process.
 
 \section{Related Work}
 % related work and state of the art
