@@ -91,10 +91,10 @@
 
 \section{Introduction}
 % Limit: 150 words
-% Actual: 216 words
+% Actual: 222 words
 
 Hardware designs are increasingly complex due to advances in fabrication
-technology and larger systems resulting in higher costs, both in the
+technology and larger systems resulting in higher costs in both the
 design and fabrication phases.
 To ensure correctness of the design, verification is crucial.
 Design and verification tools need to handle the increased complexity and
@@ -202,7 +202,7 @@ An overview of \gls{circt} and the planned extensions is shown in Figure
 
 This work extends \gls{circt} to support linear temporal logic across multiple
 input formats and investigates transformation methods to make verification
-properties accessible to consuming tools.
+properties accessible to downstream tools.
 Research focuses on temporal logic abstractions to leverage verification
 information for improving the integrated circuit design process.
 
@@ -285,14 +285,14 @@ open-source design tools.
 
 To achieve this goal, the following main research questions must be addressed:
 
-\begin{itemize}
+\begin{enumerate}
   \item How can linear temporal logic be represented in a multi-level
     intermediate representation?
   \item How must transformation methods be designed in order to propagate the
     user-specified verifications to later stages in the tool flow?
   \item Which insights can be gained from the specified properties and
     sequences?
-\end{itemize}
+\end{enumerate}
 
 With this thesis, a basis for more capable verification of hardware designs
 will be created, as well as a first look into ways to make further use of
@@ -314,8 +314,8 @@ The research is structured into two phases: developing a suitable temporal
 logic representation within \gls{circt}'s dialect framework, followed by
 leveraging these representations for hardware design optimization and analysis.
 
-In order to consume the \gls{sva}, the SystemVerilog support of \gls{circt}
-must be extended.
+In order to consume \glspl{sva}, the SystemVerilog support of \gls{circt} must
+be extended.
 The lexing, parsing and elaboration of the SystemVerilog description is handled
 by Slang, a separate project, which comes with a high language feature
 completeness for SystemVerilog, while providing programmatic methods to extract
@@ -323,7 +323,7 @@ information from the generated \gls{ast}.
 With the design represented in the \gls{ast}, a translation into \gls{circt}'s
 dialects follows.
 A suitable representation and dialect translation path for \glspl{sva} must be
-found, an example of different representations is shown in Figure
+found; an example of different representations is shown in Figure
 \ref{fig:dialectAbstraction}.
 Dialect transformations, if possible, for different output variants will
 provide new benefits for later stage tools.
