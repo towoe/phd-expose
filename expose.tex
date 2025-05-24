@@ -329,10 +329,10 @@ temporal logic.
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \node[box, minimum width=5cm, text=black] at (0,0) {\texttt{assert (a \#\#1
+    \node[box, minimum width=5cm, text=black] (input) at (0,0) {\texttt{assert (a \#\#1
     b $\rightarrow$ c)}};
     \node[draw, wip, align=left, anchor=east, style={dashed, draw=gray!80},
-    font=\ttfamily\footnotesize] at (-1, -4) {
+    font=\ttfamily\footnotesize] (option1) at (-1, -4) {
       \%0 = \%clk : clock \\
       \%1 = a : boolean \\
       \%2 = b : boolean \\
@@ -343,7 +343,7 @@ temporal logic.
       \%7 = assert \%6
     };
     \node[draw, wip, align=left, anchor=west, style={dashed, draw=gray!80},
-    font=\ttfamily\footnotesize] at (1,-4) {
+    font=\ttfamily\footnotesize] (option2) at (1,-4) {
       \%0 = a : boolean \\
       \%1 = b : boolean \\
       \%2 = sequence \%clk, \%0, \%1 \{ \\
@@ -356,6 +356,9 @@ temporal logic.
       \} \\
       assert \%4
     };
+
+    \draw[->, dashed, draw=gray] (input) -- (option1.north);
+    \draw[->, dashed, draw=gray] (input) -- (option2.north);
   \end{tikzpicture}
   \caption{Pseudo example representations of a \gls{sva} statement. A suitable
   way to represent various statements while also providing a way to transform
@@ -426,7 +429,7 @@ temporal logic.
       11 bad 10 }\\
     };
 
-    \draw[->, dashed, draw=gray] (sva_stmt) -- (ltl);
+    \draw[->, draw=gray] (sva_stmt) -- (ltl);
     \draw[->, dashed, draw=gray] (ltl) -- (logic.north);
     \draw[->, dashed, draw=gray] (ltl) -- (sim);
     \draw[->, dashed, draw=gray] (ltl) -- (formal.north);
