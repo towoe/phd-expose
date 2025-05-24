@@ -93,17 +93,17 @@ To ensure correctness of the design, verification is crucial.
 Design and verification tools need to handle the increased complexity and
 provide more capable methods.
 
-One method ensuring correct behavior is to specify expected signal sequences
-and verify that the design exhibits particular states following these
+One method to ensure correct behavior is to specify expected signal sequences
+and verify that the design exhibits expected states following these
 sequences, as illustrated in Figure \ref{fig:sequences}.
 Concurrent \glspl{sva}, fundamentally based on \gls{ltl}, provide a powerful
 way to express such temporal properties.
-While \gls{sva} are widely supported in proprietary industry tools, support in
-the open-source semiconductor ecosystem is limited, negatively impacting design
-quality and tool adoption.
+While \gls{sva} is widely supported in proprietary industry tools, support
+in the open-source semiconductor ecosystem is limited, negatively impacting
+design quality and tool adoption.
 This limitation also prevents research in temporal logic for hardware
 verification, analysis and optimization, as there are no common tools available
-to build on.
+to build upon.
 
 \begin{figure}
   \centering
@@ -146,8 +146,8 @@ to build on.
 
 \gls{circt} \cite{eldridgeMLIRHardwareCompiler2021} offers a framework for
 hardware designs with basic SystemVerilog support.
-Built on \gls{mlir} \cite{lattnerMLIRScalingCompiler2021}, \gls{circt} enables
-multi-level abstractions and provides modular transformation passes for
+Building on \gls{mlir} \cite{lattnerMLIRScalingCompiler2021}, \gls{circt}
+enables multi-level abstractions and provides modular transformation passes for
 different input and output formats.
 An overview of \gls{circt} and the planned extensions is shown in Figure
 \ref{fig:toolOverview}.
@@ -207,18 +207,18 @@ information for improving the integrated circuit design process.
 
 \gls{circt} is actively developed and already has contributions related to this work.
 An approach for temporal logic \cite{pnueliTemporalLogicPrograms1977} in \gls{circt}
-is introduced in \cite{dobisFormalVerificationHardware2024}, with the \gls{ltl}
+is introduced in \cite{dobisFormalVerificationHardware2024} with the \gls{ltl}
 dialect and allows to specify the properties in Chisel
 \cite{bachrachChiselConstructingHardware2012}.
-Chisel is a hardware construction language, which also produces SystemVerilog
-\cite{IEEEStandardSystemVerilog2024} code as an exchange format for other
-tools.
+Chisel is a hardware construction language, which uses \gls{circt} to generate
+SystemVerilog \cite{IEEEStandardSystemVerilog2024} code as an exchange format
+for other tools.
 
 \glspl{sva} are widely used in the industry
-\cite{witharanaSurveyAssertionbasedHardware2022}, but the support in
-open-source tools is limited.
+\cite{witharanaSurveyAssertionbasedHardware2022}, but the support in the
+open-source ecosystem is limited.
 A widely used open-source tool for synthesis is Yosys \cite{yosys}, which only
-has full \gls{sva} support in conjunction with the proprietary
+has full \gls{sva} support in combination with the proprietary
 tool Verific \cite{verific2025}.
 The open-source SystemVerilog front-end only supports immediate assertions and
 can not handle temporal logic.
@@ -236,8 +236,8 @@ sunImprovingVerificationProductivity2023} and specialized tests
 
 Traditionally, temporal logic is used in simulation
 \cite{habibiExtensionSystemCSystemVerilog2004, dahanCombiningSystemLevel2005},
-but there are also efforts to utilize the assertions in emulation and related
-to this the required transformations \cite{cimattiSymbolicCompilationPSL2008,
+but there are also efforts to utilize the assertions in emulation which require
+transformations \cite{cimattiSymbolicCompilationPSL2008,
 ehlersSymbolicBoundedSynthesis2010, noureddineSynthesisSequentialExtended2014}.
 For a system emulation with a \gls{fpga}, this typically relies on transforming
 the statements to synthesizable hardware and the creation of a checker monitor
@@ -248,13 +248,13 @@ represent the logic statements in \gls{sva} and shows the
 overhead for different examples when targeting \glspl{fpga}.
 
 Beyond the traditional usage of assertions and temporal logic, research shows
-how additional purposes can be realized.
+how additional benefits can be realized.
 An example that does not rely on assertions, but extracts timing information
 by analyzing \gls{fsm}, makes use of the insights to detect leakage
 of secrets \cite{reimannQTFlowQuantitativeTimingSensitive2024}.
-In order to estimate the system power consumption divides the system into
-different operation modes, based on descriptions given in assertion properties
-\cite{ahujaAssertionBasedModalPower2007}.
+In order to estimate system power consumption,
+\cite{ahujaAssertionBasedModalPower2007} divides the system into different
+operation modes, based on descriptions given in assertion properties.
 Both examples demonstrate how timing information, derived or explicitly
 defined, can be utilized for analytical purposes beyond traditional
 verification objectives.
