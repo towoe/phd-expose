@@ -110,12 +110,12 @@ sequences, as illustrated in Figure \ref{fig:sequences}.
 Concurrent \glspl{sva}, fundamentally based on \gls{ltl}, provide a powerful
 way to express such temporal properties.
 While \gls{sva} is widely supported in proprietary industry tools, support
-in the open-source semiconductor ecosystem is limited, negatively impacting
-design quality and tool adoption.
-% Stefan: Maybe motivation other way around? -> better adoption
-This limitation also prevents research in temporal logic for hardware
-verification, analysis and optimization, as there are no common tools available
-to build upon.
+in the open-source semiconductor ecosystem is limited.
+A more complete \gls{sva} support by open-source tools would lead to a greater
+adoption and provide a basis for a higher design quality.
+This would also enable more research into temporal logic for hardware
+verification, analysis and optimization, by providing an open infrastructure on
+which to build.
 
 \begin{figure}
   \centering
@@ -291,13 +291,12 @@ open-source design tools.
 To achieve this goal, the following main research questions must be addressed:
 
 \begin{enumerate}
-  \item How can linear temporal logic most efficiently be represented in a
-    multi-level intermediate representation?
+  \item In a multi-level intermediate representation, how can linear temporal
+    logic be represented most efficiently?
   \item How must scalable transformation methods be designed in order to
     propagate the user-specified verifications to later stages in the tool
     flow?
-  \item Which insights can be gained from the 'specified properties and
-    sequences?' %Stefan: what do you mean?
+  \item What system insights can be gained from SystemVerilog Assertions?
 \end{enumerate}
 
 With this thesis, a basis for more capable verification of hardware designs
